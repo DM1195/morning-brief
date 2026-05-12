@@ -3,18 +3,1228 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Morning Brief</title>
+  <title>Morning Brief — Tuesday, May 12, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Georgia, serif; background: #f1ece1; color: #1a1714; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-    .msg { text-align: center; }
-    h1 { font-style: italic; font-size: 2rem; margin-bottom: 0.5rem; }
-    p { color: #6e655a; font-size: 0.9rem; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper: #f1ece1;
+      --ink: #1a1714;
+      --clay: #b85c3a;
+      --mute: #6e655a;
+      --rule: #bcb3a0;
+      --display: "Instrument Serif", Georgia, serif;
+      --body: "Geist", -apple-system, system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --col: min(680px, calc(100vw - 3rem));
+      --col-wide: min(900px, calc(100vw - 2rem));
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Folio progress bar ── */
+    .folio-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--rule);
+      z-index: 100;
+    }
+    .folio-bar-fill {
+      display: block;
+      height: 100%;
+      width: calc(var(--p, 0) * 100%);
+      background: var(--clay);
+      transition: width 60ms linear;
+    }
+
+    /* ── Masthead ── */
+    .mast {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: var(--paper);
+      border-bottom: 1px solid var(--rule);
+      padding: 1.25rem max(1.5rem, calc((100vw - var(--col-wide)) / 2));
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: padding 300ms ease;
+    }
+    .mast.is-compact { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+
+    .mast-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mute);
+      white-space: nowrap;
+    }
+
+    .mast-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+    .mast-title .amp { font-style: normal; color: var(--clay); margin: 0 0.15em; }
+    .mast.is-compact .mast-title { font-size: clamp(1rem, 2.5vw, 1.4rem); }
+
+    .mast-date {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--mute);
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    /* ── Magazine body ── */
+    .mag { padding-bottom: 6rem; }
+
+    .section-inner {
+      max-width: var(--col);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .section-inner--wide {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ── Cover ── */
+    .cover {
+      padding: 6rem 1.5rem 5rem;
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .cover-kicker {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 1.5rem;
+    }
+
+    .cover-headline {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      max-width: 16ch;
+    }
+
+    .cover-stand {
+      font-size: 1.05rem;
+      color: var(--mute);
+      line-height: 1.65;
+      max-width: 52ch;
+      margin-bottom: 3rem;
+    }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem 2rem;
+      border-top: 1px solid var(--rule);
+      padding-top: 1.5rem;
+    }
+    .toc-item {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .toc-num {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--clay);
+      flex-shrink: 0;
+    }
+    .toc-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--mute);
+    }
+    .toc-item a { text-decoration: none; color: inherit; }
+    .toc-item a:hover .toc-label { color: var(--clay); }
+
+    /* ── Section shared ── */
+    .sec {
+      padding: 5rem 0 4rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .sec-header {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .sec-kicker {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.4rem;
+    }
+
+    .sec-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+    }
+
+    .sec-standfirst {
+      font-size: 0.85rem;
+      color: var(--mute);
+      line-height: 1.6;
+      max-width: 38ch;
+      text-align: right;
+      font-style: italic;
+    }
+
+    /* ── Reveal ── */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    [data-reveal].is-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    [data-reveal][data-delay="1"] { transition-delay: 80ms; }
+    [data-reveal][data-delay="2"] { transition-delay: 160ms; }
+    [data-reveal][data-delay="3"] { transition-delay: 240ms; }
+    [data-reveal][data-delay="4"] { transition-delay: 320ms; }
+    [data-reveal][data-delay="5"] { transition-delay: 400ms; }
+
+    /* ── News section ── */
+    .lead-article {
+      max-width: var(--col);
+      margin: 0 auto 3rem;
+      padding: 0 1.5rem;
+    }
+
+    .lead-topic {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.5rem;
+    }
+
+    .lead-headline {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .lead-headline a { color: inherit; text-decoration: none; }
+    .lead-headline a:hover { color: var(--clay); }
+
+    .lead-source {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--mute);
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.05em;
+    }
+
+    .lead-body { font-size: 0.95rem; line-height: 1.7; color: var(--ink); }
+
+    .lead-body p:first-child::first-letter {
+      font-family: var(--display);
+      font-size: 4.2em;
+      font-style: italic;
+      line-height: 0.72;
+      float: left;
+      margin: 0.05em 0.08em 0 0;
+      color: var(--clay);
+    }
+
+    .lead-aside {
+      border-left: 2px solid var(--clay);
+      padding-left: 1rem;
+      margin-top: 1.5rem;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .aside-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+    }
+
+    .aside-text { font-size: 0.88rem; color: var(--mute); line-height: 1.6; }
+
+    .news-grid {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    .news-card {
+      border-top: 1px solid var(--rule);
+      padding-top: 1rem;
+    }
+
+    .card-topic {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.4rem;
+    }
+
+    .card-headline {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      margin-bottom: 0.35rem;
+    }
+    .card-headline a { color: inherit; text-decoration: none; }
+    .card-headline a:hover { color: var(--clay); }
+
+    .card-source {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--mute);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    .card-summary { font-size: 0.85rem; color: var(--mute); line-height: 1.6; }
+
+    .card-link {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--clay);
+      text-decoration: none;
+    }
+    .card-link:hover { text-decoration: underline; }
+
+    /* ── Art break ── */
+    .art-break {
+      padding: 4rem 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 2.5rem;
+      max-width: var(--col-wide);
+      margin: 0 auto;
+    }
+    .art-break--flip { flex-direction: row-reverse; }
+
+    .art-frame {
+      flex: 0 0 auto;
+      width: min(320px, 42vw);
+      position: relative;
+      overflow: hidden;
+      border-radius: 1px;
+      box-shadow: 0 8px 40px rgba(26,23,20,0.18), 0 2px 8px rgba(26,23,20,0.1);
+    }
+    .art-frame::before {
+      content: "";
+      display: block;
+      padding-bottom: 125%;
+    }
+    .art-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: translateY(calc(var(--parY, 0) * 1px));
+      will-change: transform;
+    }
+
+    .art-caption {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1rem 0;
+    }
+
+    .art-num {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 1rem;
+    }
+
+    .art-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      margin-bottom: 0.5rem;
+    }
+
+    .art-meta {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--mute);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.25rem;
+    }
+
+    .art-story { font-size: 0.88rem; color: var(--mute); line-height: 1.7; font-style: italic; max-width: 36ch; }
+
+    /* ── Social section ── */
+    .sentiment-bar-wrap {
+      max-width: var(--col);
+      margin: 0 auto 2.5rem;
+      padding: 0 1.5rem;
+    }
+
+    .sentiment-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mute);
+      margin-bottom: 0.5rem;
+    }
+
+    .sentiment-bar {
+      display: flex;
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      gap: 2px;
+    }
+
+    .sentiment-pos { background: #6a8f5c; }
+    .sentiment-neu { background: var(--rule); }
+    .sentiment-neg { background: var(--clay); }
+
+    .sentiment-legend {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--mute);
+      letter-spacing: 0.06em;
+    }
+    .legend-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-dot--pos { background: #6a8f5c; }
+    .legend-dot--neu { background: var(--rule); }
+    .legend-dot--neg { background: var(--clay); }
+
+    .pullquote {
+      max-width: var(--col);
+      margin: 0 auto 2.5rem;
+      padding: 0 1.5rem;
+      border-left: 3px solid var(--clay);
+    }
+
+    .pullquote-handle {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--clay);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .pullquote-text {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+
+    .pullquote-attr {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--mute);
+      letter-spacing: 0.05em;
+    }
+
+    .thread-list {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .thread-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      border-top: 1px solid var(--rule);
+      padding-top: 1rem;
+    }
+
+    .thread-platform {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+      flex-shrink: 0;
+      padding-top: 0.15rem;
+    }
+
+    .thread-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 0.3rem;
+    }
+    .thread-title a { color: inherit; text-decoration: none; }
+    .thread-title a:hover { color: var(--clay); }
+
+    .thread-signal { font-size: 0.8rem; color: var(--mute); line-height: 1.5; }
+
+    /* ── Substack section ── */
+    .substack-grid {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .nl-card {
+      border-top: 1px solid var(--rule);
+      padding-top: 1rem;
+    }
+
+    .nl-sender {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.35rem;
+    }
+
+    .nl-subject {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+    }
+    .nl-subject a { color: inherit; text-decoration: none; }
+    .nl-subject a:hover { color: var(--clay); }
+
+    .nl-summary { font-size: 0.85rem; color: var(--mute); line-height: 1.6; margin-bottom: 0.75rem; }
+
+    .nl-insight {
+      font-size: 0.82rem;
+      color: var(--ink);
+      line-height: 1.55;
+      border-left: 2px solid var(--rule);
+      padding-left: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-style: italic;
+    }
+
+    .nl-angle {
+      font-size: 0.78rem;
+      color: var(--mute);
+      margin-bottom: 0.75rem;
+    }
+
+    .nl-link {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--clay);
+      text-decoration: none;
+    }
+    .nl-link:hover { text-decoration: underline; }
+
+    /* ── Podcast section ── */
+    .podcast-shell {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink);
+    }
+
+    .podcast-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.25;
+      transform: translateY(calc(var(--parY, 0) * 0.5px));
+      will-change: transform;
+    }
+
+    .podcast-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(26,23,20,0.6) 0%, rgba(26,23,20,0.85) 100%);
+    }
+
+    .podcast-inner {
+      position: relative;
+      z-index: 1;
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 5rem 1.5rem;
+    }
+
+    .podcast-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 2rem;
+    }
+
+    .episode-list { display: grid; gap: 2rem; }
+
+    .episode-card {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 2rem;
+      background: rgba(241,236,225,0.04);
+      border: 1px solid rgba(241,236,225,0.1);
+      border-radius: 2px;
+      padding: 1.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .episode-card { grid-template-columns: 1fr; }
+    }
+
+    .episode-show {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.35rem;
+    }
+
+    .episode-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      color: var(--paper);
+      margin-bottom: 0.35rem;
+    }
+
+    .episode-pub {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: rgba(241,236,225,0.4);
+      letter-spacing: 0.06em;
+    }
+
+    .episode-summary { font-size: 0.85rem; color: rgba(241,236,225,0.75); line-height: 1.6; margin-bottom: 1rem; }
+
+    .episode-moments {
+      list-style: none;
+      display: grid;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .episode-moments li {
+      font-size: 0.82rem;
+      color: rgba(241,236,225,0.65);
+      line-height: 1.5;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .moment-ts {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--clay);
+      flex-shrink: 0;
+      padding-top: 0.15rem;
+    }
+
+    .episode-verdict {
+      font-size: 0.82rem;
+      color: rgba(241,236,225,0.55);
+      font-style: italic;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .audio-player {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .play-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(241,236,225,0.3);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 200ms, background 200ms;
+      flex-shrink: 0;
+    }
+    .play-btn:hover { border-color: var(--clay); background: rgba(184,92,58,0.15); }
+    .play-btn.is-playing { background: var(--clay); border-color: var(--clay); }
+
+    .play-icon {
+      display: block;
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 5px 0 5px 9px;
+      border-color: transparent transparent transparent rgba(241,236,225,0.8);
+      margin-left: 2px;
+    }
+    .play-btn.is-playing .play-icon {
+      width: 10px; height: 10px;
+      border: none;
+      background: rgba(241,236,225,0.8);
+      border-radius: 1px;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect x='0' y='0' width='3.5' height='10'/%3E%3Crect x='6.5' y='0' width='3.5' height='10'/%3E%3C/svg%3E");
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect x='0' y='0' width='3.5' height='10'/%3E%3Crect x='6.5' y='0' width='3.5' height='10'/%3E%3C/svg%3E");
+      margin-left: 0;
+    }
+
+    .podcast-episode-link {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(241,236,225,0.5);
+      text-decoration: none;
+    }
+    .podcast-episode-link:hover { color: var(--clay); }
+
+    /* ── Colophon ── */
+    .colophon {
+      max-width: var(--col);
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+      border-top: 1px solid var(--rule);
+      text-align: center;
+    }
+
+    .colophon-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--mute);
+      margin-bottom: 0.75rem;
+    }
+
+    .colophon-tally {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--mute);
+      margin-bottom: 0.5rem;
+    }
+
+    .colophon-art {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.06em;
+      color: var(--rule);
+      margin-bottom: 1.5rem;
+    }
+
+    .colophon-mark {
+      display: inline-block;
+      width: 1px;
+      height: 40px;
+      background: var(--rule);
+    }
+
+    /* ── Utility ── */
+    .printer-rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 0;
+    }
+
+    @media (max-width: 640px) {
+      .art-break {
+        flex-direction: column !important;
+      }
+      .art-frame {
+        width: 100%;
+      }
+      .art-frame::before {
+        padding-bottom: 75%;
+      }
+      .cover-headline {
+        font-size: 2.2rem;
+      }
+      .episode-card {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="msg">
-    <h1>Morning Brief</h1>
-    <p>Today's edition will appear here at 6am Pacific.</p>
-  </div>
+
+  <!-- Folio progress bar -->
+  <div class="folio-bar"><span class="folio-bar-fill"></span></div>
+
+  <!-- Masthead -->
+  <header class="mast" id="mast">
+    <div class="mast-eyebrow">Vol. I &nbsp;·&nbsp; No. 12</div>
+    <h1 class="mast-title"><em>Morning</em><span class="amp"> / </span><em>Brief</em></h1>
+    <div class="mast-date">TUESDAY, MAY 12, 2026</div>
+  </header>
+
+  <main class="mag">
+
+    <!-- Cover -->
+    <section class="cover" data-reveal>
+      <div class="cover-kicker">Today's Intelligence &nbsp;·&nbsp; 5 articles · 8 newsletters</div>
+      <h2 class="cover-headline">The Year Founders Stopped Waiting for the Check</h2>
+      <p class="cover-stand">Five companies captured 75% of all venture capital this quarter — and founders building outside that orbit are responding not with despair, but with infrastructure. Today's brief tracks the bifurcation, the solo founder data that rewrites conventional wisdom, and the newsletters arguing that the skills gap matters more than the funding gap.</p>
+      <nav class="toc">
+        <div class="toc-item"><span class="toc-num">01</span><a href="#sec-news"><span class="toc-label">Industry News</span></a></div>
+        <div class="toc-item"><span class="toc-num">02</span><a href="#sec-social"><span class="toc-label">Social Pulse</span></a></div>
+        <div class="toc-item"><span class="toc-num">03</span><a href="#sec-substack"><span class="toc-label">Substack Brief</span></a></div>
+      </nav>
+    </section>
+
+    <!-- ── Section I: Industry News ── -->
+    <section class="sec sec--news" id="sec-news">
+      <div class="sec-header">
+        <div>
+          <div class="sec-kicker">Section I</div>
+          <h2 class="sec-title">Industry News</h2>
+        </div>
+        <p class="sec-standfirst">The VC landscape is bifurcating — and knowing which half you're in changes your entire strategy.</p>
+      </div>
+
+      <!-- Lead article -->
+      <div class="lead-article" data-reveal>
+        <div class="lead-topic">Venture Capital</div>
+        <h3 class="lead-headline"><a href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9jcWFGZkxqVklhVmcyQ0g0cmNCb05LajNnUTRBSHl2QzZ0WTlMc0cybU56bXlDQWJNUVJRTG9YTWhRaWxvS2ZwcnhGeG5QOEhmcGNKaW1LLUdzTzNXbVdPQS1xR3Y2THM?oc=5" target="_blank">"Less than 3% of venture capital funding goes to women — that's what I wanted to fix"</a></h3>
+        <div class="lead-source">CTech · 5h ago</div>
+        <div class="lead-body">
+          <p>A founder-turned-fund-manager built a venture vehicle to address a gap that has held at roughly 3% of all VC deployed for years — despite widespread industry attention and no sign of self-correction. She made the shift from operator to allocator because the structural reasons are clear: traditional VC will not rebalance without deliberate capital reallocation from people who have lived the rejection. For B2B founders building in spaces where 97% of the money is chasing companies that don't look like theirs, this is a direct map of who is building the alternative capital infrastructure. The open question is whether emerging funds like hers can reach the scale needed to move the aggregate number, or whether they remain a precision correction inside a much larger broken system.</p>
+        </div>
+        <div class="lead-aside">
+          <div>
+            <div class="aside-label">Claude's Take</div>
+            <div class="aside-text">The stat itself is old news — what's new is that the founders experiencing the gap are now building the fix from the capital side. That structural shift matters: the next generation of women-focused funds will be run by people who were the rejected pitch, not philanthropists.</div>
+          </div>
+          <div>
+            <div class="aside-label">Content Angle</div>
+            <div class="aside-text">Substack: "The 3% Problem: Why I'd Rather Build a Fund Than Wait for VC to Fix Itself" — frame this as a solo founder's real choice between seeking traditional VC and building alternative capital structures.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- News grid -->
+      <div class="news-grid">
+        <div class="news-card" data-reveal data-delay="1">
+          <div class="card-topic">Entrepreneurship</div>
+          <div class="card-headline"><a href="https://news.google.com/rss/articles/CBMivwFBVV95cUxOWVZsakhTd1JuYXNabm5GRkpIM0p4bzF6M1JRMGZGbVozU0Y4dTJzUVZvcG0wdVRSc2ZsSDBYODNYNFBhNlp3c1JTTGhYT1FLSVF6ZXF3ZjJiLUxxaHozMVlUWWx1NDlGaVhnM08tWnJVMkd5LVgzRmh4clVwa1ZNdzBRTmtEQ2lISWRyWExFbF96R0JQa2ZlcWd3cUlBcEpEQ1BEN3lhMnRTZ3V3UVlJTWY3V1U0aF9zX2RzNHpvYw?oc=5" target="_blank">The $1 Million Threshold That Is Reshaping Women's Entrepreneurship</a></div>
+          <div class="card-source">Forbes · 2h ago</div>
+          <div class="card-summary">Crossing $1M ARR functions as a category change for women-owned businesses — opening access to capital, contracts, and media attention that earlier milestones don't unlock. Women-owned businesses at this threshold grow at nearly twice the rate of those below it.</div>
+          <a class="card-link" href="https://news.google.com/rss/articles/CBMivwFBVV95cUxOWVZsakhTd1JuYXNabm5GRkpIM0p4bzF6M1JRMGZGbVozU0Y4dTJzUVZvcG0wdVRSc2ZsSDBYODNYNFBhNlp3c1JTTGhYT1FLSVF6ZXF3ZjJiLUxxaHozMVlUWWx1NDlGaVhnM08tWnJVMkd5LVgzRmh4clVwa1ZNdzBRTmtEQ2lISWRyWExFbF96R0JQa2ZlcWd3cUlBcEpEQ1BEN3lhMnRTZ3V3UVlJTWY3V1U0aF9zX2RzNHpvYw?oc=5" target="_blank">Read →</a>
+        </div>
+        <div class="news-card" data-reveal data-delay="2">
+          <div class="card-topic">Solo Founder</div>
+          <div class="card-headline"><a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxNQkxsQ05nakJhR1ZhNWEzMk9zZzhyX3BENnl2aTJPN0ExempvZ2hkVXF5Vm5MNzFqSGtpS05Sa0dyVFN5cjEwSTRmc0tEWGloUHRYWk9OS0pFcGFYUnJaOUlJNk5meEdNNllKQlgtOVR0d3dnZ3lWTzFXTzRxZEdUQnFFeWtSMUg4djY5SEJwV0UxdlRLTWlpVW54bHE4d2FsUHN2QV80ODNCQQ?oc=5" target="_blank">The new solo founder stack: How AI tools are replacing early-stage teams</a></div>
+          <div class="card-source">Cyprus Mail · Yesterday</div>
+          <div class="card-summary">A pragmatic breakdown of which AI tools are holding up under production pressure vs. still in demo mode — covering research, iteration, copywriting, modeling, and support. Customer-facing functions are where AI leverage is compounding fastest for B2B solo founders.</div>
+          <a class="card-link" href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxNQkxsQ05nakJhR1ZhNWEzMk9zZzhyX3BENnl2aTJPN0ExempvZ2hkVXF5Vm5MNzFqSGtpS05Sa0dyVFN5cjEwSTRmc0tEWGloUHRYWk9OS0pFcGFYUnJaOUlJNk5meEdNNllKQlgtOVR0d3dnZ3lWTzFXTzRxZEdUQnFFeWtSMUg4djY5SEJwV0UxdlRLTWlpVW54bHE4d2FsUHN2QV80ODNCQQ?oc=5" target="_blank">Read →</a>
+        </div>
+        <div class="news-card" data-reveal data-delay="3">
+          <div class="card-topic">Venture Capital</div>
+          <div class="card-headline"><a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOaUs3dHJ4WkV2bDMwTFFQSlh2dnh0VUhpYmJ0Q0lsaFVwMXBnVERtRmhFZHBXeHlBSThBN2NqQUl1YkdtekZVQko3ckl1emtnZUNRSjl6NUxESmk1THozeDVSR01Ibks3dnNuUVpVQy10djBvMnpVbFJTcGdpWFdTQW5UN1RoNzF5RlhjelZmWDV1dFlwQTdvNmZNT1ZwWDQ1TzUyZnVXaUtNa3BxaVU2S3h3?oc=5" target="_blank">VC Firm Takes Less-Is-More Approach With $450 Million Fund</a></div>
+          <div class="card-source">Bloomberg · 2h ago</div>
+          <div class="card-summary">A $450M fund closes with fewer bets and larger ownership stakes per company — a deliberate correction against spray-and-pray. Concentrated funds write bigger initial checks and participate more aggressively in follow-ons, but move slower at the portfolio level.</div>
+          <a class="card-link" href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOaUs3dHJ4WkV2bDMwTFFQSlh2dnh0VUhpYmJ0Q0lsaFVwMXBnVERtRmhFZHBXeHlBSThBN2NqQUl1YkdtekZVQko3ckl1emtnZUNRSjl6NUxESmk1THozeDVSR01Ibks3dnNuUVpVQy10djBvMnpVbFJTcGdpWFdTQW5UN1RoNzF5RlhjelZmWDV1dFlwQTdvNmZNT1ZwWDQ1TzUyZnVXaUtNa3BxaVU2S3h3?oc=5" target="_blank">Read →</a>
+        </div>
+        <div class="news-card" data-reveal data-delay="4">
+          <div class="card-topic">Startup Fundraising</div>
+          <div class="card-headline"><a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxPVVBLTS1aVThmd2gwamlZN3JYTVNzeDR2N2hQbWFqMnFyT2hZa2ktRmlYb2VJeS1VVVFxa1UwbVpPZlVPVjFrMWtoV1ZLTTJqRU56cEh2SWpqWmZHS0U4ME4xRmg0dU56RV9rSmQtOE9MSVdHUWg5dXhnc3ZmbFNHNlJUWkFZdmtLWmVNNXlKcExmUjNIbmhGUE1oQW9jc3NPYzVSWGVwR04yUnVEODdnenFPeHZlZw?oc=5" target="_blank">European AI Funding Is Growing. Will That Boost The Region's Startup Scene?</a></div>
+          <div class="card-source">Crunchbase News · 3h ago</div>
+          <div class="card-summary">AI-focused venture funding across Europe is up, with UK, France, and Germany leading — but the infrastructure gap still pushes capital-intensive AI bets toward US and UK hubs. For US B2B founders, Europe is a distribution opportunity before it's a fundraising opportunity.</div>
+          <a class="card-link" href="https://news.google.com/rss/articles/CBMitgFBVV95cUxPVVBLTS1aVThmd2gwamlZN3JYTVNzeDR2N2hQbWFqMnFyT2hZa2ktRmlYb2VJeS1VVVFxa1UwbVpPZlVPVjFrMWtoV1ZLTTJqRU56cEh2SWpqWmZHS0U4ME4xRmg0dU56RV9rSmQtOE9MSVdHUWg5dXhnc3ZmbFNHNlJUWkFZdmtLWmVNNXlKcExmUjNIbmhGUE1oQW9jc3NPYzVSWGVwR04yUnVEODdnenFPeHZlZw?oc=5" target="_blank">Read →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Art Break 1 ── -->
+    <div class="art-break" data-art-break="1">
+      <div class="art-frame" data-parallax>
+        <img class="art-img" src="https://www.artic.edu/iiif/2/1adf2696-8489-499b-cad2-821d7fde4b33/full/1600,/0/default.jpg" alt="Paris Street; Rainy Day — Gustave Caillebotte">
+      </div>
+      <div class="art-caption">
+        <div class="art-num">Plate I &nbsp;·&nbsp; Oil on canvas</div>
+        <div class="art-title">Paris Street; Rainy Day</div>
+        <div class="art-meta">Gustave Caillebotte &nbsp;·&nbsp; 1877</div>
+        <p class="art-story">Caillebotte was an engineer before he was a painter. This canvas is mathematically precise — the perspective is calculated, not felt. He painted Haussmann's Paris as a diagram of modern loneliness. 67 people in the frame. None of them touching.</p>
+      </div>
+    </div>
+
+    <!-- ── Section II: Social Pulse ── -->
+    <section class="sec sec--social" id="sec-social">
+      <div class="sec-header">
+        <div>
+          <div class="sec-kicker">Section II</div>
+          <h2 class="sec-title">Social Pulse</h2>
+        </div>
+        <p class="sec-standfirst">The funding cliff is real, but so is a quiet confidence shift — solo founders are done apologizing for building alone.</p>
+      </div>
+
+      <!-- Sentiment bar -->
+      <div class="sentiment-bar-wrap" data-reveal>
+        <div class="sentiment-label">Online sentiment — founders &amp; builders</div>
+        <div class="sentiment-bar">
+          <div class="sentiment-pos" style="flex: 50"></div>
+          <div class="sentiment-neu" style="flex: 25"></div>
+          <div class="sentiment-neg" style="flex: 25"></div>
+        </div>
+        <div class="sentiment-legend">
+          <span class="legend-item"><span class="legend-dot legend-dot--pos"></span>Positive</span>
+          <span class="legend-item"><span class="legend-dot legend-dot--neu"></span>Neutral</span>
+          <span class="legend-item"><span class="legend-dot legend-dot--neg"></span>Negative</span>
+        </div>
+      </div>
+
+      <!-- Pull quote -->
+      <div class="pullquote" data-reveal data-delay="1">
+        <div class="pullquote-handle">@scalablenews on Twitter/X</div>
+        <blockquote class="pullquote-text">"Startups don't fail because one person made too many decisions. They fail because decisions took too long."</blockquote>
+        <div class="pullquote-attr">— Solo Founders Report 2026 · scalable.news · widely reshared today</div>
+      </div>
+
+      <!-- Threads -->
+      <div class="thread-list">
+        <div class="thread-item" data-reveal data-delay="1">
+          <div class="thread-platform">Reddit</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://www.saastr.com/vc-in-2026-75-of-all-the-money-is-going-to-just-5-funds-and-just-5-startups/" target="_blank">75% of all VC money in Q1 2026 went to 5 companies — $195B to OpenAI, Anthropic, xAI, Waymo, Databricks. Deal count is at its lowest since 2016.</a></div>
+            <div class="thread-signal">Resigned pragmatism, not outrage — the community is quietly shifting toward "figure it out without VC" thinking. The $195.6B number keeps circulating with the same dry note: "this is not your round."</div>
+          </div>
+        </div>
+        <div class="thread-item" data-reveal data-delay="2">
+          <div class="thread-platform">Reddit</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://blog.mean.ceo/solo-founders-outperform-teams/" target="_blank">Solo founders are outperforming co-founder teams — the data is in and the gap is larger than anyone expected</a></div>
+            <div class="thread-signal">52.3% of successful exits came from solo founders. Half the comments are relieved the numbers back them up. The other half question survivorship bias. The VC bias against solos has never looked more indefensible by data.</div>
+          </div>
+        </div>
+        <div class="thread-item" data-reveal data-delay="3">
+          <div class="thread-platform">Reddit</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://www.reddit.com/r/Bootstrapped/" target="_blank">Bootstrapping is no longer the fallback for founders who couldn't raise — it's becoming the brand signal</a></div>
+            <div class="thread-signal">The cultural flip is real: founders who chose not to raise are posting with more confidence than those who did. "Discipline over dilution" is becoming an identity, not just a funding outcome.</div>
+          </div>
+        </div>
+        <div class="thread-item" data-reveal data-delay="4">
+          <div class="thread-platform">Reddit</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://www.reddit.com/r/SaaS/" target="_blank">Vibe coding launched my MVP in 3 days. A security researcher found 1.5M exposed API tokens on day 4.</a></div>
+            <div class="thread-signal">The vibe coding backlash is hitting r/SaaS hard. The Moltbook breach became the week's cautionary tale. Developer trust in AI coding accuracy dropped from 43% to 33% YoY — speed is great until it isn't.</div>
+          </div>
+        </div>
+        <div class="thread-item" data-reveal data-delay="5">
+          <div class="thread-platform">Reddit</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://www.reddit.com/r/Entrepreneur/" target="_blank">Series A is now the hardest raise of 2026 — fewer than 15% of seed-stage startups make it, and the bar moved to $2M+ ARR</a></div>
+            <div class="thread-signal">Founders who raised seed in 2024–2025 are staring at a Series A bar that shifted dramatically upward. The thread is part strategy session, part support group. The repeated refrain: "Treat your seed round like it has to last five years."</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Art Break 2 ── -->
+    <div class="art-break art-break--flip" data-art-break="2">
+      <div class="art-frame" data-parallax>
+        <img class="art-img" src="https://www.artic.edu/iiif/2/9021a2cf-2815-4b78-a29e-f4be10a6c76b/full/1600,/0/default.jpg" alt="The Old Guitarist — Pablo Picasso">
+      </div>
+      <div class="art-caption">
+        <div class="art-num">Plate II &nbsp;·&nbsp; Oil on panel</div>
+        <div class="art-title">The Old Guitarist</div>
+        <div class="art-meta">Pablo Picasso &nbsp;·&nbsp; 1903–1904</div>
+        <p class="art-story">Picasso painted this during his Blue Period, after his friend Carlos Casagemas died by suicide. He was 22 and nearly broke. He said he only used blue because he was sad. The guitarist has no eyes — Picasso painted them over a woman's face from an earlier canvas. Look closely.</p>
+      </div>
+    </div>
+
+    <!-- ── Section III: Substack Brief ── -->
+    <section class="sec sec--substack" id="sec-substack">
+      <div class="sec-header">
+        <div>
+          <div class="sec-kicker">Section III</div>
+          <h2 class="sec-title">Substack Brief</h2>
+        </div>
+        <p class="sec-standfirst">From skills gaps to stress drift to OpenAI's enterprise land grab — eight reads that rewire how you think about building alone.</p>
+      </div>
+      <div class="substack-grid">
+        <div class="nl-card" data-reveal data-delay="1">
+          <div class="nl-sender">Rise &amp; Optimize</div>
+          <div class="nl-subject"><a href="https://riseandoptimize.substack.com/p/some-career-lessons-i-apparently" target="_blank">Some Career Lessons I Apparently Needed to Learn 14 Different Times</a></div>
+          <div class="nl-summary">Fifteen years of startup operations distilled into four lessons, each learned the hard way: speak up before the timeline slips, not after; being right is not always the most important thing in a room that runs on morale; the best systems are almost always boring — clear owner, clear next step, clear due date; and nobody is going to fully train you.</div>
+          <div class="nl-insight">Morale is infrastructure — and insisting on being right every time is a faster way to break it than any bad product decision.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> When you're the operator AND the founder, who tells you when you're wrong? — "The Missing Mirror: Why Solo Founders Need External Friction More Than Advisors"</div>
+          <a class="nl-link" href="https://riseandoptimize.substack.com/p/some-career-lessons-i-apparently" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="2">
+          <div class="nl-sender">Little Pursuits</div>
+          <div class="nl-subject"><a href="https://littlepursuits.substack.com/p/founder-stress-drift" target="_blank">You Don't Know How Stressed You Are.</a></div>
+          <div class="nl-summary">Chronic founder stress is not primarily a management problem — it is a measurement problem. The body recalibrates to sustained pressure until what used to feel alarming feels like a normal Tuesday. Two RCT-backed mechanisms help: HRV biofeedback and objective self-monitoring with accelerometers, not self-report. The actionable frame: pick one objective signal, watch it without interpreting it for 30 days, and recruit one person with explicit permission to tell you the truth.</div>
+          <div class="nl-insight">By the time a founder can feel the cost of chronic stress, they've already paid most of it — because the instrument they'd use to measure it has been quietly recalibrated by the very environment they're trying to evaluate.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> "The Founder Who Felt Nothing: A Story About Baselines" — what the solo founder's stress drift actually looks like from the outside, and why 'I'm fine' is the least reliable data point in your whole company</div>
+          <a class="nl-link" href="https://littlepursuits.substack.com/p/founder-stress-drift" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="3">
+          <div class="nl-sender">a16z Speedrun</div>
+          <div class="nl-subject"><a href="https://speedrun.substack.com/p/early-stage-markets-rarely-look-like-markets" target="_blank">Early Stage Markets Rarely Look Like Markets</a></div>
+          <div class="nl-summary">Markets begin as behavioral shifts in small, overlooked communities — not legible categories with sector maps. By the time a market is mappable, the best entry points have already closed. The signals to look for: intensity of behavior in a small group, early community that sustains itself without the company's involvement, and a small group spending surprising amounts of time in ways the founders didn't plan for. The practical method: go extremely deep with ten users before going broad.</div>
+          <div class="nl-insight">If you're waiting for your market to have a name before you build in it, you're already late — the best entry points close before the sector map exists.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> "Reading Behavioral Signals Before Your Category Exists: A Framework for Founders Building in Unsexy Spaces"</div>
+          <a class="nl-link" href="https://speedrun.substack.com/p/early-stage-markets-rarely-look-like-markets" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="4">
+          <div class="nl-sender">Anjeanette Carter</div>
+          <div class="nl-subject"><a href="https://anjeanettecarter.substack.com/p/i-took-a-60-project" target="_blank">I took a $60 project...</a></div>
+          <div class="nl-summary">Taking two $60 Upwork projects when already earning six figures was a deliberate investment in platform credibility — each became a review, which unlocked the next client, compounding toward nearly $200K. The spending hypocrisy: freelancers will spend $500 on a course about how to get clients but won't spend $50 on platform credits to actually get them. Sweat equity counts the same as cash — cheap or free projects early on become testimonials, case studies, referrals.</div>
+          <div class="nl-insight">Freelancers who stay stuck won't invest money or time — they want results without either, which is not how business works at any scale.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> "Strategic Underpricing Is Not Desperation, It's Investment" — the solo founder's version of the $60 project</div>
+          <a class="nl-link" href="https://anjeanettecarter.substack.com/p/i-took-a-60-project" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="5">
+          <div class="nl-sender">All Things Fashion Tech</div>
+          <div class="nl-subject"><a href="https://allthingsfashiontech.substack.com/p/fashion-was-sleeping-on-google-until" target="_blank">Fashion Was Sleeping On Google... Until Now</a></div>
+          <div class="nl-summary">OTB Group launched a Google Cloud partnership for AI-powered virtual try-on tools for remote clienteling. TikTok Shop beauty sales hit $928M in Q1 2026 — up 96% YoY — making it the fourth largest US online beauty retailer in under three years. ZyG raised a $60M Series A on the thesis that the entire fragmented DTC operational stack can be collapsed into one AI platform.</div>
+          <div class="nl-insight">TikTok Shop becoming the fourth largest US online beauty retailer in under three years — through community-driven commerce that bypasses traditional search — is the clearest evidence yet that discovery has permanently decoupled from Google.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> "The Commerce Stack Is Being Rebuilt From the Discovery Layer Down" — what fashion's TikTok Shop moment means for B2B founders building in commerce infrastructure</div>
+          <a class="nl-link" href="https://allthingsfashiontech.substack.com/p/fashion-was-sleeping-on-google-until" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="1">
+          <div class="nl-sender">Melissa Kwan</div>
+          <div class="nl-subject"><a href="https://www.melissakwan.com/p/making-money-is-a-skill" target="_blank">Making money is a skill</a></div>
+          <div class="nl-summary">Naval Ravikant's framing — "making money is not a thing you do, it's a skill you learn" — applied to fifteen years of founder journey. The only skill she went deep on was sales. Everything else — marketing, customer success, operations, networking — she dabbled in rather than mastered. The reframe removes victimhood: financial underperformance isn't about where you came from, it's about skills not yet acquired. And skills can be learned.</div>
+          <div class="nl-insight">The gap between where you are and where you want to be financially is almost always a skills gap disguised as a circumstance gap — and the sooner you name it as the former, the sooner you can close it.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> "The Solo Founder Skills Audit: What I've Gone Deep On, What I've Only Dabbled In, and What That Cost Me"</div>
+          <a class="nl-link" href="https://www.melissakwan.com/p/making-money-is-a-skill" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="2">
+          <div class="nl-sender">Monitor the Situation</div>
+          <div class="nl-subject"><a href="https://mtslive.substack.com/p/openai-goes-direct" target="_blank">OpenAI Goes Direct</a></div>
+          <div class="nl-summary">OpenAI launched the OpenAI Deployment Company — a $4B entity backed by TPG, Goldman Sachs, SoftBank, Bain, and McKinsey — that will forward-deploy hundreds of engineers directly into enterprise clients to build AI solutions on-site. Frontier labs are no longer waiting for businesses to come to them through APIs; they are going to businesses directly, competing with traditional systems integrators. Also: Cerebras IPO at $32–34B, Musk v. Altman trial week three, US homicides in major cities down 18% YoY.</div>
+          <div class="nl-insight">OpenAI embedding engineers inside enterprise clients is not a consulting play — it's a distribution moat: once your AI is built into a company's workflow by the model provider's own people, switching cost becomes structural.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> What the OpenAI Deployment Company means for B2B SaaS founders who've been counting on the fact that enterprise AI needs a third party to deploy it</div>
+          <a class="nl-link" href="https://mtslive.substack.com/p/openai-goes-direct" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="3">
+          <div class="nl-sender">The Founder's Corner</div>
+          <div class="nl-subject"><a href="https://www.the-founders-corner.com/p/i-asked-claude-to-reject-my-pitch" target="_blank">I asked Claude to reject my pitch until it couldn't. Then I raised.</a></div>
+          <div class="nl-summary">VC meeting failure is almost never a company quality problem — it's a preparation problem, and the standard methods (advisors, pitch coaches) all have a social contract that makes them useless at replicating adversarial investor dynamics. A 10-prompt Claude system locks the model into a "predisposed not to invest" mode, then challenges market size, defensibility, unit economics, team risk, timing, and competitive landscape. The data: median time from seed to Series A has doubled to 774 days; VCs spend 3 minutes 44 seconds on a seed deck; 42% of decks are abandoned before the final slide.</div>
+          <div class="nl-insight">You have 224 seconds — the founders who raise use them to make investors feel why the company has to exist; the ones who don't use them to explain what the product does.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> "The Question I Couldn't Answer: What the Claude Pitch Stress Test Exposed" — a solo founder runs the adversarial pitch prep system</div>
+          <a class="nl-link" href="https://www.the-founders-corner.com/p/i-asked-claude-to-reject-my-pitch" target="_blank">Read on Substack →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Art Break 3 ── -->
+    <div class="art-break" data-art-break="3">
+      <div class="art-frame" data-parallax>
+        <img class="art-img" src="https://www.artic.edu/iiif/2/a6b1a83b-3a54-4e9b-b3f2-3c03ab2826fd/full/1600,/0/default.jpg" alt="American Gothic — Grant Wood">
+      </div>
+      <div class="art-caption">
+        <div class="art-num">Plate III &nbsp;·&nbsp; Oil on beaverboard</div>
+        <div class="art-title">American Gothic</div>
+        <div class="art-meta">Grant Wood &nbsp;·&nbsp; 1930</div>
+        <p class="art-story">Wood painted his sister and his dentist as the models — not a married couple. The woman looks slightly to the side, the man straight at you. When it was first shown, Iowans were furious. Wood thought he was painting American determination. Everyone else saw something else.</p>
+      </div>
+    </div>
+
+    <!-- ── Art Break 4 ── -->
+    <div class="art-break art-break--flip" data-art-break="4">
+      <div class="art-frame" data-parallax>
+        <img class="art-img" src="https://www.artic.edu/iiif/2/d858f5b7-7a3e-b604-4a97-394e17e6c5d2/full/1600,/0/default.jpg" alt="The Child's Bath — Mary Cassatt">
+      </div>
+      <div class="art-caption">
+        <div class="art-num">Plate IV &nbsp;·&nbsp; Oil on canvas</div>
+        <div class="art-title">The Child's Bath</div>
+        <div class="art-meta">Mary Cassatt &nbsp;·&nbsp; 1893</div>
+        <p class="art-story">Cassatt was the only American in the Impressionist circle. She never married. She painted women and children — not because she was sentimental, but because they were the only subjects she could access without a chaperone. This is about intimacy without sentiment.</p>
+      </div>
+    </div>
+
+    <!-- Colophon -->
+    <footer class="colophon" data-reveal>
+      <div class="colophon-title"><em>Morning Brief</em></div>
+      <div class="colophon-tally">5 articles · 8 newsletters</div>
+      <div class="colophon-art">Paris Street; Rainy Day (Caillebotte) · The Old Guitarist (Picasso) · American Gothic (Wood) · The Child's Bath (Cassatt)</div>
+      <span class="colophon-mark"></span>
+      <div class="colophon-tally" style="margin-top:1.25rem">© 2026 · Assembled daily for Durva Mathure</div>
+    </footer>
+
+  </main>
+
+  <script>
+  (function () {
+    var mast = document.getElementById('mast');
+    var folioFill = document.querySelector('.folio-bar-fill');
+    var revealEls = document.querySelectorAll('[data-reveal]');
+    var parallaxEls = document.querySelectorAll('[data-parallax]');
+    var audioEls = document.querySelectorAll('audio');
+    var ticking = false;
+
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }
+
+    function update() {
+      ticking = false;
+      var scrollTop = window.scrollY;
+      var docH = document.documentElement.scrollHeight - window.innerHeight;
+      var p = docH > 0 ? scrollTop / docH : 0;
+
+      // Folio bar
+      document.documentElement.style.setProperty('--p', p);
+
+      // Masthead compact
+      if (scrollTop > 80) mast.classList.add('is-compact');
+      else mast.classList.remove('is-compact');
+
+      // Reveal
+      var wH = window.innerHeight;
+      revealEls.forEach(function (el) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < wH * 0.88 || rect.bottom < 0) {
+          el.classList.add('is-in');
+        }
+      });
+
+      // Parallax
+      parallaxEls.forEach(function (el) {
+        var frame = el.closest('.art-frame') || el;
+        var rect = frame.getBoundingClientRect();
+        var center = rect.top + rect.height / 2 - window.innerHeight / 2;
+        var img = frame.querySelector('.art-img') || el.querySelector('.art-img') || el;
+        img.style.transform = 'translateY(' + (center * 0.07).toFixed(1) + 'px)';
+      });
+
+      // Podcast bg parallax
+      var podBg = document.querySelector('.podcast-bg');
+      if (podBg) {
+        var rect = podBg.getBoundingClientRect();
+        var center = rect.top + rect.height / 2 - window.innerHeight / 2;
+        podBg.style.transform = 'translateY(' + (center * 0.04).toFixed(1) + 'px)';
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+
+    // Audio players
+    audioEls.forEach(function (audio) {
+      var btn = audio.parentElement.querySelector('.play-btn');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var isPlaying = !audio.paused;
+        audioEls.forEach(function (a) {
+          if (a !== audio) {
+            a.pause();
+            var b = a.parentElement.querySelector('.play-btn');
+            if (b) b.classList.remove('is-playing');
+          }
+        });
+        if (isPlaying) {
+          audio.pause();
+          btn.classList.remove('is-playing');
+        } else {
+          audio.play();
+          btn.classList.add('is-playing');
+        }
+      });
+      audio.addEventListener('ended', function () {
+        btn.classList.remove('is-playing');
+      });
+    });
+  })();
+  </script>
+
 </body>
 </html>

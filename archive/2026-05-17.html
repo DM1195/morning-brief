@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morning Brief — Sunday, May 17, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper: #f1ece1;
+      --ink: #1a1714;
+      --clay: #b85c3a;
+      --mute: #6e655a;
+      --rule: #bcb3a0;
+      --display: "Instrument Serif", Georgia, serif;
+      --body: "Geist", -apple-system, system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --col: min(680px, calc(100vw - 3rem));
+      --col-wide: min(900px, calc(100vw - 2rem));
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── Folio progress bar ── */
+    .folio-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--rule);
+      z-index: 100;
+    }
+    .folio-bar-fill {
+      display: block;
+      height: 100%;
+      width: calc(var(--p, 0) * 100%);
+      background: var(--clay);
+      transition: width 60ms linear;
+    }
+
+    /* ── Masthead ── */
+    .mast {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: var(--paper);
+      border-bottom: 1px solid var(--rule);
+      padding: 1.25rem max(1.5rem, calc((100vw - var(--col-wide)) / 2));
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: padding 300ms ease;
+    }
+    .mast.is-compact { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+
+    .mast-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mute);
+      white-space: nowrap;
+    }
+
+    .mast-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+    .mast-title .amp { font-style: normal; color: var(--clay); margin: 0 0.15em; }
+    .mast.is-compact .mast-title { font-size: clamp(1rem, 2.5vw, 1.4rem); }
+
+    .mast-date {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--mute);
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    /* ── Magazine body ── */
+    .mag { padding-bottom: 6rem; }
+
+    .section-inner {
+      max-width: var(--col);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .section-inner--wide {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ── Cover ── */
+    .cover {
+      padding: 6rem 1.5rem 5rem;
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .cover-kicker {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 1.5rem;
+    }
+
+    .cover-headline {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      max-width: 16ch;
+    }
+
+    .cover-stand {
+      font-size: 1.05rem;
+      color: var(--mute);
+      line-height: 1.65;
+      max-width: 52ch;
+      margin-bottom: 3rem;
+    }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem 2rem;
+      border-top: 1px solid var(--rule);
+      padding-top: 1.5rem;
+    }
+    .toc-item {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .toc-num {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--clay);
+      flex-shrink: 0;
+    }
+    .toc-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--mute);
+    }
+    .toc-item a { text-decoration: none; color: inherit; }
+    .toc-item a:hover .toc-label { color: var(--clay); }
+
+    /* ── Section shared ── */
+    .sec {
+      padding: 5rem 0 4rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .sec-header {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .sec-kicker {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.4rem;
+    }
+
+    .sec-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+    }
+
+    .sec-standfirst {
+      font-size: 0.85rem;
+      color: var(--mute);
+      line-height: 1.6;
+      max-width: 38ch;
+      text-align: right;
+      font-style: italic;
+    }
+
+    /* ── Reveal ── */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    [data-reveal].is-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    [data-reveal][data-delay="1"] { transition-delay: 80ms; }
+    [data-reveal][data-delay="2"] { transition-delay: 160ms; }
+    [data-reveal][data-delay="3"] { transition-delay: 240ms; }
+    [data-reveal][data-delay="4"] { transition-delay: 320ms; }
+    [data-reveal][data-delay="5"] { transition-delay: 400ms; }
+
+    /* ── News section ── */
+    .lead-article {
+      max-width: var(--col);
+      margin: 0 auto 3rem;
+      padding: 0 1.5rem;
+    }
+
+    .lead-topic {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.5rem;
+    }
+
+    .lead-headline {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .lead-headline a { color: inherit; text-decoration: none; }
+    .lead-headline a:hover { color: var(--clay); }
+
+    .lead-source {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--mute);
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.05em;
+    }
+
+    .lead-body { font-size: 0.95rem; line-height: 1.7; color: var(--ink); }
+
+    .lead-body p:first-child::first-letter {
+      font-family: var(--display);
+      font-size: 4.2em;
+      font-style: italic;
+      line-height: 0.72;
+      float: left;
+      margin: 0.05em 0.08em 0 0;
+      color: var(--clay);
+    }
+
+    .lead-aside {
+      border-left: 2px solid var(--clay);
+      padding-left: 1rem;
+      margin-top: 1.5rem;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .aside-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+    }
+
+    .aside-text { font-size: 0.88rem; color: var(--mute); line-height: 1.6; }
+
+    .news-grid {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    .news-card {
+      border-top: 1px solid var(--rule);
+      padding-top: 1rem;
+    }
+
+    .card-topic {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.4rem;
+    }
+
+    .card-headline {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      margin-bottom: 0.35rem;
+    }
+    .card-headline a { color: inherit; text-decoration: none; }
+    .card-headline a:hover { color: var(--clay); }
+
+    .card-source {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--mute);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    .card-summary { font-size: 0.85rem; color: var(--mute); line-height: 1.6; }
+
+    .card-link {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--clay);
+      text-decoration: none;
+    }
+    .card-link:hover { text-decoration: underline; }
+
+    /* ── Art break ── */
+    .art-break {
+      padding: 4rem 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 2.5rem;
+      max-width: var(--col-wide);
+      margin: 0 auto;
+    }
+    .art-break--flip { flex-direction: row-reverse; }
+
+    .art-frame {
+      flex: 0 0 auto;
+      width: min(320px, 42vw);
+      position: relative;
+      border-radius: 0;
+      border: 14px solid transparent;
+      background-image:
+        linear-gradient(var(--paper), var(--paper)),
+        linear-gradient(
+          135deg,
+          #dab840 0%, #f6e47c 9%,
+          #c07c18 20%, #d8aa3c 31%,
+          #a86c10 43%, #dab840 55%,
+          #f2d86c 67%, #bc8a1c 79%,
+          #dab840 100%
+        );
+      background-origin: padding-box, border-box;
+      background-clip: padding-box, border-box;
+      box-shadow:
+        0 0 0 1px rgba(78,46,0,0.45),
+        0 18px 52px rgba(26,23,20,0.28),
+        0 4px 14px rgba(26,23,20,0.14);
+    }
+    .art-frame::before {
+      content: "";
+      display: block;
+      padding-bottom: 125%;
+    }
+    .art-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,215,60,0.2),
+        inset 0 0 22px rgba(65,38,0,0.14);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .art-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .art-caption {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1rem 0;
+    }
+
+    .art-num {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 1rem;
+    }
+
+    .art-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      margin-bottom: 0.5rem;
+    }
+
+    .art-meta {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--mute);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.25rem;
+    }
+
+    .art-story { font-size: 0.88rem; color: var(--mute); line-height: 1.7; font-style: italic; max-width: 36ch; }
+
+    /* ── Social section ── */
+    .sentiment-bar-wrap {
+      max-width: var(--col);
+      margin: 0 auto 2.5rem;
+      padding: 0 1.5rem;
+    }
+
+    .sentiment-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mute);
+      margin-bottom: 0.5rem;
+    }
+
+    .sentiment-bar {
+      display: flex;
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      gap: 2px;
+    }
+
+    .sentiment-pos { background: #6a8f5c; }
+    .sentiment-neu { background: var(--rule); }
+    .sentiment-neg { background: var(--clay); }
+
+    .sentiment-legend {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--mute);
+      letter-spacing: 0.06em;
+    }
+    .legend-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-dot--pos { background: #6a8f5c; }
+    .legend-dot--neu { background: var(--rule); }
+    .legend-dot--neg { background: var(--clay); }
+
+    .pullquote {
+      max-width: var(--col);
+      margin: 0 auto 2.5rem;
+      padding: 0 1.5rem;
+      border-left: 3px solid var(--clay);
+    }
+
+    .pullquote-handle {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--clay);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .pullquote-text {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+
+    .pullquote-attr {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--mute);
+      letter-spacing: 0.05em;
+    }
+
+    .thread-list {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .thread-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      border-top: 1px solid var(--rule);
+      padding-top: 1rem;
+    }
+
+    .thread-platform {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+      flex-shrink: 0;
+      padding-top: 0.15rem;
+    }
+
+    .thread-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 0.3rem;
+    }
+    .thread-title a { color: inherit; text-decoration: none; }
+    .thread-title a:hover { color: var(--clay); }
+
+    .thread-signal { font-size: 0.8rem; color: var(--mute); line-height: 1.5; }
+
+    /* ── Substack section ── */
+    .substack-grid {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .nl-card {
+      border-top: 1px solid var(--rule);
+      padding-top: 1rem;
+    }
+
+    .nl-sender {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.35rem;
+    }
+
+    .nl-subject {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+    }
+    .nl-subject a { color: inherit; text-decoration: none; }
+    .nl-subject a:hover { color: var(--clay); }
+
+    .nl-summary { font-size: 0.85rem; color: var(--mute); line-height: 1.6; margin-bottom: 0.75rem; }
+
+    .nl-insight {
+      font-size: 0.82rem;
+      color: var(--ink);
+      line-height: 1.55;
+      border-left: 2px solid var(--rule);
+      padding-left: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-style: italic;
+    }
+
+    .nl-angle {
+      font-size: 0.78rem;
+      color: var(--mute);
+      margin-bottom: 0.75rem;
+    }
+
+    .nl-link {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--clay);
+      text-decoration: none;
+    }
+    .nl-link:hover { text-decoration: underline; }
+
+    /* ── Podcast section ── */
+    .podcast-shell {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink);
+    }
+
+    .podcast-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.25;
+      transform: translateY(calc(var(--parY, 0) * 0.5px));
+      will-change: transform;
+    }
+
+    .podcast-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(26,23,20,0.6) 0%, rgba(26,23,20,0.85) 100%);
+    }
+
+    .podcast-inner {
+      position: relative;
+      z-index: 1;
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 5rem 1.5rem;
+    }
+
+    .podcast-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 2rem;
+    }
+
+    .episode-list { display: grid; gap: 2rem; }
+
+    .episode-card {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 2rem;
+      background: rgba(241,236,225,0.04);
+      border: 1px solid rgba(241,236,225,0.1);
+      border-radius: 2px;
+      padding: 1.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .episode-card { grid-template-columns: 1fr; }
+    }
+
+    .episode-show {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.35rem;
+    }
+
+    .episode-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      color: var(--paper);
+      margin-bottom: 0.35rem;
+    }
+
+    .episode-pub {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: rgba(241,236,225,0.4);
+      letter-spacing: 0.06em;
+    }
+
+    .episode-summary { font-size: 0.85rem; color: rgba(241,236,225,0.75); line-height: 1.6; margin-bottom: 1rem; }
+
+    .episode-moments {
+      list-style: none;
+      display: grid;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .episode-moments li {
+      font-size: 0.82rem;
+      color: rgba(241,236,225,0.65);
+      line-height: 1.5;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .moment-ts {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--clay);
+      flex-shrink: 0;
+      padding-top: 0.15rem;
+    }
+
+    .episode-verdict {
+      font-size: 0.82rem;
+      color: rgba(241,236,225,0.55);
+      font-style: italic;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .audio-player {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .play-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(241,236,225,0.3);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 200ms, background 200ms;
+      flex-shrink: 0;
+    }
+    .play-btn:hover { border-color: var(--clay); background: rgba(184,92,58,0.15); }
+    .play-btn.is-playing { background: var(--clay); border-color: var(--clay); }
+
+    .play-icon {
+      display: block;
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 5px 0 5px 9px;
+      border-color: transparent transparent transparent rgba(241,236,225,0.8);
+      margin-left: 2px;
+    }
+    .play-btn.is-playing .play-icon {
+      width: 10px; height: 10px;
+      border: none;
+      background: rgba(241,236,225,0.8);
+      border-radius: 1px;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect x='0' y='0' width='3.5' height='10'/%3E%3Crect x='6.5' y='0' width='3.5' height='10'/%3E%3C/svg%3E");
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect x='0' y='0' width='3.5' height='10'/%3E%3Crect x='6.5' y='0' width='3.5' height='10'/%3E%3C/svg%3E");
+      margin-left: 0;
+    }
+
+    .podcast-episode-link {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(241,236,225,0.5);
+      text-decoration: none;
+    }
+    .podcast-episode-link:hover { color: var(--clay); }
+
+    /* ── Colophon ── */
+    .colophon {
+      max-width: var(--col);
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+      border-top: 1px solid var(--rule);
+      text-align: center;
+    }
+
+    .colophon-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--mute);
+      margin-bottom: 0.75rem;
+    }
+
+    .colophon-tally {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--mute);
+      margin-bottom: 0.5rem;
+    }
+
+    .colophon-art {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.06em;
+      color: var(--rule);
+      margin-bottom: 1.5rem;
+    }
+
+    .colophon-mark {
+      display: inline-block;
+      width: 1px;
+      height: 40px;
+      background: var(--rule);
+    }
+
+    /* ── Utility ── */
+    .printer-rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 0;
+    }
+
+    @media (max-width: 640px) {
+      .art-break {
+        flex-direction: column !important;
+        padding: 2.5rem 1.25rem;
+        gap: 1.5rem;
+      }
+      .art-frame {
+        width: 100%;
+        border-width: 10px;
+      }
+      .art-frame::before {
+        padding-bottom: 72%;
+      }
+      .cover-headline {
+        font-size: 2.2rem;
+      }
+      .episode-card {
+        grid-template-columns: 1fr;
+      }
+      .sec-header {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      .sec-standfirst {
+        text-align: left;
+        max-width: none;
+      }
+      .cover {
+        padding: 3.5rem 1.25rem 3rem;
+      }
+      .sec {
+        padding: 3.5rem 0 2.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .mast-eyebrow { display: none; }
+      .mast-date { display: none; }
+      .mast-title { font-size: 1.5rem !important; }
+      .news-grid,
+      .thread-list,
+      .substack-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Folio progress bar -->
+  <div class="folio-bar"><span class="folio-bar-fill"></span></div>
+
+  <!-- Masthead -->
+  <header class="mast" id="mast">
+    <div class="mast-eyebrow">Vol. I &nbsp;·&nbsp; No. 17</div>
+    <h1 class="mast-title"><em>Morning</em><span class="amp"> / </span><em>Brief</em></h1>
+    <div class="mast-date">SUNDAY, MAY 17, 2026</div>
+  </header>
+
+  <main class="mag">
+
+    <!-- Cover -->
+    <section class="cover" data-reveal>
+      <div class="cover-kicker">Today's Intelligence &nbsp;·&nbsp; 6 articles · 5 newsletters</div>
+      <h2 class="cover-headline">The Compliance Age Arrives Before You're Ready</h2>
+      <p class="cover-stand">State governments are writing AI's rulebook while Washington stalls — Illinois's eight-bill package and Colorado's five new laws are the leading edge of a compliance wave that will reshape every B2B product. Meanwhile, 81% of global VC went to AI in Q1 2026, but bootstrapped founders are finding the math more in their favor than the headlines suggest.</p>
+      <nav class="toc">
+        <div class="toc-item"><span class="toc-num">01</span><a href="#sec-news"><span class="toc-label">Industry News</span></a></div>
+        <div class="toc-item"><span class="toc-num">02</span><a href="#sec-social"><span class="toc-label">Social Pulse</span></a></div>
+        <div class="toc-item"><span class="toc-num">03</span><a href="#sec-substack"><span class="toc-label">Substack Brief</span></a></div>
+      </nav>
+    </section>
+
+    <!-- ── Section I: Industry News ── -->
+    <section class="sec sec--news" id="sec-news">
+      <div class="sec-header">
+        <div>
+          <div class="sec-kicker">Section I</div>
+          <h2 class="sec-title">Industry News</h2>
+        </div>
+        <p class="sec-standfirst">AI regulation is fragmenting at the state level while capital concentrates at the top — both at unprecedented speed.</p>
+      </div>
+
+      <!-- Lead article -->
+      <div class="lead-article" data-reveal>
+        <div class="lead-topic">AI POLICY REGULATION</div>
+        <h3 class="lead-headline"><a href="https://capitolnewsillinois.com/NEWS/behind-the-scenes-of-illinois-ai-regulatory-negotiations" target="_blank">Behind the scenes of Illinois' AI regulatory negotiations</a></h3>
+        <div class="lead-source">Capitol News Illinois · 3d ago</div>
+        <div class="lead-body">
+          <p>Illinois is moving an eight-bill AI regulation package that reaches further than anything California or New York has attempted — with Senate Bill 315 targeting companies at $500 million in annual revenue and requiring third-party audits, 72-hour incident reporting, and mandatory public safety disclosures. The fact that both Anthropic and OpenAI have publicly endorsed this coordinated state approach tells you something: they'd rather negotiate with Springfield than fifty city halls. For B2B SaaS founders, the $500M revenue threshold feels like comfortable distance, but state frameworks copy each other and the bar consistently drops after the first legislative session. The AI-skeptic buyer may be disappearing from the enterprise, but the AI-compliance-skeptic founder is the one running out of time.</p>
+        </div>
+        <div class="lead-aside">
+          <div>
+            <div class="aside-label">Claude's Take</div>
+            <div class="aside-text">The $500M threshold is a delay, not an exemption — build with compliance architecture in mind now, when it's cheap, rather than scrambling for it when it's mandatory.</div>
+          </div>
+          <div>
+            <div class="aside-label">Content Angle</div>
+            <div class="aside-text">LinkedIn post: 'Every AI founder is about to become a compliance officer. Here's what Illinois's 8-bill AI package actually requires — and why the $500M threshold is not the protection you think it is.'</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- News grid -->
+      <div class="news-grid">
+        <div class="news-card" data-reveal data-delay="1">
+          <div class="card-topic">WOMEN FOUNDER GRANTS FUNDING</div>
+          <div class="card-headline"><a href="https://femtechinsider.com/four-new-funds-womens-health-founders/" target="_blank">Four New Funds Women's Health Founders Should Know About</a></div>
+          <div class="card-source">Femtech Insider · 6d ago</div>
+          <div class="card-summary">Four funds — TechThrive ($7M pre-seed), Wisdom Ventures Fund II ($77.7M, ~40 checks), Araya Sie Fund (£7.5M, UK/Europe), and a British Business Bank co-investment vehicle (£1M) — closed or launched specifically targeting women's health and female founders. Wisdom Ventures alone needs to deploy into 40 companies, which means they are moving fast on the right early-stage founder.</div>
+          <a class="card-link" href="https://femtechinsider.com/four-new-funds-womens-health-founders/" target="_blank">Read →</a>
+        </div>
+        <div class="news-card" data-reveal data-delay="2">
+          <div class="card-topic">AI POLICY REGULATION</div>
+          <div class="card-headline"><a href="https://www.coloradopolitics.com/legislature/2026/05/13/ais-rapid-growth-spurs-regulatory-reaction-in-colorado/" target="_blank">AI's rapid growth spurs regulatory reaction in Colorado</a></div>
+          <div class="card-source">Colorado Politics · 4d ago</div>
+          <div class="card-summary">Colorado passed five AI bills covering automated decision disclosures, chatbot identity, AI restrictions on therapists, health insurer AI use, and a ban on price-setting algorithms. For founders with any dynamic pricing component, House Bill 1210 is direct exposure: even using a vendor's AI-powered pricing tool could create liability.</div>
+          <a class="card-link" href="https://www.coloradopolitics.com/legislature/2026/05/13/ais-rapid-growth-spurs-regulatory-reaction-in-colorado/" target="_blank">Read →</a>
+        </div>
+        <div class="news-card" data-reveal data-delay="3">
+          <div class="card-topic">STARTUP FUNDRAISING VENTURE CAPITAL</div>
+          <div class="card-headline"><a href="https://tech-insider.org/q1-2026-venture-capital-hits-297b-ai-captures-81-of-record-funding/" target="_blank">Q1 2026 Venture Capital Hits $297B: AI Captures 81% of Record Funding</a></div>
+          <div class="card-source">tech-insider.org · Apr 19</div>
+          <div class="card-summary">Global VC reached $297 billion in Q1 2026, with 81% flowing to AI companies — leaving non-AI founders competing for roughly $56 billion of a record pile. The structural case for grants, non-dilutive capital, and revenue-based financing has never been stronger for founders outside the AI frontier.</div>
+          <a class="card-link" href="https://tech-insider.org/q1-2026-venture-capital-hits-297b-ai-captures-81-of-record-funding/" target="_blank">Read →</a>
+        </div>
+        <div class="news-card" data-reveal data-delay="4">
+          <div class="card-topic">FRONTIER AI STARTUP ADOPTION</div>
+          <div class="card-headline"><a href="https://www.cnbc.com/2026/05/11/openai-enterprise-ai-adoption-tipping-point.html" target="_blank">OpenAI revenue chief says enterprise AI adoption is 'at a tipping point'</a></div>
+          <div class="card-source">CNBC · 6d ago</div>
+          <div class="card-summary">OpenAI's revenue chief told CNBC that enterprise AI adoption has crossed an inflection point — pilots are becoming full deployments and buying cycles are compressing. For B2B founders, the AI-skeptic buyer is disappearing, but so is patience for point-solution stacks when CFOs prefer to consolidate spend on fewer vendors.</div>
+          <a class="card-link" href="https://www.cnbc.com/2026/05/11/openai-enterprise-ai-adoption-tipping-point.html" target="_blank">Read →</a>
+        </div>
+        <div class="news-card" data-reveal data-delay="5">
+          <div class="card-topic">STARTUP FUNDRAISING VENTURE CAPITAL</div>
+          <div class="card-headline"><a href="https://news.crunchbase.com/venture/anduril-5-billion-defense-tech-funding/" target="_blank">Anduril Raises Another $5B As Defense Tech Startups Shatter Funding Records</a></div>
+          <div class="card-source">Crunchbase News · 4d ago</div>
+          <div class="card-summary">Anduril closed a $5 billion Series H — total capital raised now exceeds $10 billion — as defense tech becomes the new megafund category. Institutional capital that previously avoided defense is returning as geopolitical risk reprices the calculus. For B2B founders, this represents VC attention and capital moving further away from your market.</div>
+          <a class="card-link" href="https://news.crunchbase.com/venture/anduril-5-billion-defense-tech-funding/" target="_blank">Read →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Art Break 1 ── -->
+    <div class="art-break" data-art-break="1">
+      <div class="art-frame" data-parallax>
+        <img class="art-img" src="https://www.artic.edu/iiif/2/50034c7f-ce51-00f1-430e-a6f7efc233fc/full/1600,/0/default.jpg" alt="Nocturne: Blue and Gold—Southampton Water — James McNeill Whistler">
+      </div>
+      <div class="art-caption">
+        <div class="art-num">Plate I &nbsp;·&nbsp; Oil on canvas</div>
+        <div class="art-title">Nocturne: Blue and Gold—Southampton Water</div>
+        <div class="art-meta">James McNeill Whistler &nbsp;·&nbsp; 1872</div>
+        <p class="art-story">This work belongs to Whistler's radical Nocturnes series, in which he borrowed a title from music to insist that painting could do what music does — evoke sensation rather than represent fact. The still harbor dissolves into graduated bands of blue-grey, the scattered lights barely disturbing the surface, the horizon impossible to find. What makes the Nocturnes so strange is how much Whistler left out: no boats, no dock workers, no commerce — just the moment when Southampton Water stops being a place and becomes a mood.</p>
+      </div>
+    </div>
+
+    <!-- ── Section II: Social Pulse ── -->
+    <section class="sec sec--social" id="sec-social">
+      <div class="sec-header">
+        <div>
+          <div class="sec-kicker">Section II</div>
+          <h2 class="sec-title">Social Pulse</h2>
+        </div>
+        <p class="sec-standfirst">The bootstrapper thesis is winning the emotional argument — even as the headline numbers favor the megafunds.</p>
+      </div>
+
+      <!-- Sentiment bar -->
+      <div class="sentiment-bar-wrap" data-reveal>
+        <div class="sentiment-label">Online sentiment — founders &amp; builders</div>
+        <div class="sentiment-bar">
+          <div class="sentiment-pos" style="flex: 50"></div>
+          <div class="sentiment-neu" style="flex: 25"></div>
+          <div class="sentiment-neg" style="flex: 25"></div>
+        </div>
+        <div class="sentiment-legend">
+          <span class="legend-item"><span class="legend-dot legend-dot--pos"></span>Positive</span>
+          <span class="legend-item"><span class="legend-dot legend-dot--neu"></span>Neutral</span>
+          <span class="legend-item"><span class="legend-dot legend-dot--neg"></span>Negative</span>
+        </div>
+      </div>
+
+      <!-- Pull quote -->
+      <div class="pullquote" data-reveal data-delay="1">
+        <div class="pullquote-handle">@yasser_elsaid_ on Twitter/X</div>
+        <blockquote class="pullquote-text">"The biggest mistake bootstrapped founders make is acting like a bootstrapped founder."</blockquote>
+        <div class="pullquote-attr">— Yasser Elsaid · Chatbase ($8M ARR, 100% bootstrapped)</div>
+      </div>
+
+      <!-- Threads -->
+      <div class="thread-list">
+        <div class="thread-item" data-reveal data-delay="1">
+          <div class="thread-platform">Reddit</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://www.reddit.com/r/startups/" target="_blank">One AI company took 48% of all US VC in April. Here's what that means if you're raising a seed round.</a></div>
+            <div class="thread-signal">Project Prometheus's $10B raise skewed national VC stats — AI took 73 cents of every venture dollar in April 2026. Founders are sitting with sharp dissonance: the headlines say the market is hot, but their inboxes say otherwise. Frustrated realism.</div>
+          </div>
+        </div>
+        <div class="thread-item" data-reveal data-delay="2">
+          <div class="thread-platform">Reddit</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://www.reddit.com/r/Entrepreneur/" target="_blank">AI tool stacks cost $500/mo now. A team to do the same work costs $100K/mo. Why are founders still asking VCs for permission?</a></div>
+            <div class="thread-signal">Solo founder share hit 36.3% of new US ventures by 2025 and is still climbing. The mood is pragmatic liberation — founders treating VC scarcity not as a problem but as clarity about what kind of company to build.</div>
+          </div>
+        </div>
+        <div class="thread-item" data-reveal data-delay="3">
+          <div class="thread-platform">Reddit</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://www.reddit.com/r/Bootstrapped/" target="_blank">Bootstrapped my AI startup to $20K MRR after my VC-backed company failed. Here's what actually changed.</a></div>
+            <div class="thread-signal">The "too much slides, too little customers" post-mortem is landing as a gut punch of recognition across the bootstrapped community. The tone is quiet, battle-tested confidence — not smugness, just relief.</div>
+          </div>
+        </div>
+        <div class="thread-item" data-reveal data-delay="4">
+          <div class="thread-platform">Reddit</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://www.reddit.com/r/SaaS/" target="_blank">SaaS without AI is now unmarketable. Founders who haven't integrated are feeling it in conversion.</a></div>
+            <div class="thread-signal">The debate has moved past whether to add AI and is stuck on pricing — token costs are complex, customer tolerance for usage limits varies, and nobody has a clean model. Anxiety dressed as confidence.</div>
+          </div>
+        </div>
+        <div class="thread-item" data-reveal data-delay="5">
+          <div class="thread-platform">Twitter/X</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://www.contextstudios.ai/blog/polsia-how-a-solo-founder-hit-1m-arr-in-30-days-with-ai-agents" target="_blank">Ben Broca (@benbroca) — Polsia: $0 to $1M ARR in 30 days. No team. No employees. Thousands of AI agents running businesses.</a></div>
+            <div class="thread-signal">Polsia's timeline is circulating on X with a mix of awe and productive skepticism — founders screenshotting the numbers as proof of the one-person company thesis while comments ask the harder questions about liability and sustainability.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Art Break 2 ── -->
+    <div class="art-break art-break--flip" data-art-break="2">
+      <div class="art-frame" data-parallax>
+        <img class="art-img" src="https://www.artic.edu/iiif/2/18092196-50ae-3ff1-9205-1b3110e966c3/full/1600,/0/default.jpg" alt="Distant View of Niagara Falls — Thomas Cole">
+      </div>
+      <div class="art-caption">
+        <div class="art-num">Plate II &nbsp;·&nbsp; Oil on wood panel</div>
+        <div class="art-title">Distant View of Niagara Falls</div>
+        <div class="art-meta">Thomas Cole &nbsp;·&nbsp; 1830</div>
+        <p class="art-story">Cole visited Niagara Falls in May 1829 and painted this a full year later — which means everything you see is an act of deliberate reconstruction: the autumnal light, the tiny figures overwhelmed by water, the wilderness closing around the viewer. He deliberately left out the sawmills and factories already crowding the shoreline in 1829, producing a version of the falls that had never quite existed. The surprise is the composition: the falls appear in the middle distance, almost modest, because Cole understood that their power lay not in spectacle but in their relationship to everything surrounding them.</p>
+      </div>
+    </div>
+
+    <!-- ── Section III: Substack Brief ── -->
+    <section class="sec sec--substack" id="sec-substack">
+      <div class="sec-header">
+        <div>
+          <div class="sec-kicker">Section III</div>
+          <h2 class="sec-title">Substack Brief</h2>
+        </div>
+        <p class="sec-standfirst">From Africa's infrastructure turn to the emotional toll of building alone, newsletters are circling the same hard questions.</p>
+      </div>
+      <div class="substack-grid">
+        <div class="nl-card" data-reveal data-delay="1">
+          <div class="nl-sender">South of the Cap Table</div>
+          <div class="nl-subject"><a href="https://southofthecaptable.substack.com/p/african-techs-next-chapter-looks" target="_blank">African tech's next chapter looks less like software and more like infrastructure</a></div>
+          <div class="nl-summary">African tech debt funding crossed $1 billion in 2025 for the first time in a decade — not as a financing technicality but as a thesis reversal. The first wave of fintech assumed physical infrastructure would build itself; companies like Sendy, Copia, and MarketForce raised hundreds of millions on thin-margin models and collapsed when capital dried up. What replaced them is infrastructure-first: solar kits, battery-swapping networks, farm input distribution — and the financial product comes after, as a natural layer on proven cash flows.</div>
+          <div class="nl-insight">The companies building Africa's next fintech layer are infrastructure businesses first — the financial product only exists because the physical asset exists first, and that order is everything.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> Any founder building SaaS on top of broken distribution should ask whether owning a piece of the physical layer makes their software ten times more defensible. 'The B2B software play that's actually an infrastructure play in disguise.'</div>
+          <a class="nl-link" href="https://southofthecaptable.substack.com/p/african-techs-next-chapter-looks" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="2">
+          <div class="nl-sender">Venture Capital Archive</div>
+          <div class="nl-subject"><a href="https://venturecapitalarchive.substack.com/p/vca053-less-is-more" target="_blank">VCA#053: Less-Is-More?</a></div>
+          <div class="nl-summary">The power law of venture returns is intensifying — and the effect is that large funds have become mathematically unsuited to generating venture-level returns. Small funds ($1M–$10M) post 17.4% IRR vs. 9.7% for large funds. Only 17% of funds above $750M ever return above 2.5x. Traced through case studies: Benchmark's six-partner structure, Founders Fund II returning $18.60 per dollar in cash, First Round's $510K Uber seed returning multiples of the fund. Mega-fund managers live on 2% fees regardless of returns — their incentive is AUM growth, not carry.</div>
+          <div class="nl-insight">Small funds cannot live on management fees so their incentives are perfectly aligned with LP returns — the firms with the most capital are generating the worst returns, confirmed across nearly every vintage year.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> Why the investor with the smaller fund might be your best bet — and how to find them. Frames the data as the argument for founders raising from emerging managers.</div>
+          <a class="nl-link" href="https://venturecapitalarchive.substack.com/p/vca053-less-is-more" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="3">
+          <div class="nl-sender">Nonlinear News</div>
+          <div class="nl-subject"><a href="https://nonlinearnews.com/p/why-you-need-an-ai-second-brain-and" target="_blank">Why you need an AI second brain (and how I built mine in 45 minutes)</a></div>
+          <div class="nl-summary">AI outputs slop because it lacks context, and the fix is not better prompting — it is a persistent folder of markdown files any agent reads before doing anything for you. Three core files (IDENTITY, VOICE, RULES) plus lane subfolders for work, content, personal, and skills. Drafts come back 90% done instead of 30%, with no cross-contamination between professional and personal voice. The critical design choice is model-agnosticism: plain text files work with Claude, ChatGPT, Perplexity, or whatever model wins next month. A 15-minute weekly update ritual keeps the system sharp.</div>
+          <div class="nl-insight">Most people are prompt-engineering their way to the first 90% of a good output every single time; a second brain inverts that so you are only editing the last 10%.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> Durva already has this system (CLAUDE.md, about-me.md, voice-profile.md) — she could write the founder-specific version from lived experience. 'I built an AI second brain before it had a name — here is what six months of using it actually taught me.'</div>
+          <a class="nl-link" href="https://nonlinearnews.com/p/why-you-need-an-ai-second-brain-and" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="4">
+          <div class="nl-sender">Lenny's Newsletter</div>
+          <div class="nl-subject"><a href="https://www.lennysnewsletter.com/p/why-were-at-the-beginning-of-the" target="_blank">Why we're at the beginning of the AI hardware boom | Caitlin Kalinowski (ex–OpenAI, Meta, Apple)</a></div>
+          <div class="nl-summary">Caitlin Kalinowski — who designed the MacBook Pro at Apple, led AR/VR hardware at Meta, and was head of robotics at OpenAI — argues the AI hardware boom is genuinely early, not overheated. VR failed not because spatial computing was wrong but because the use case was wrong; the technologies built for it now form the foundation of modern robotics. Humanoid robots are prototype-stage with mass deployment gated by supply chain fragility, not AI capability — she warns founders to pre-buy memory components before a price shock hits.</div>
+          <div class="nl-insight">The bottleneck to the robotics revolution is not AI — it is supply chain vulnerability in memory and components, and founders who pre-buy now will have a structural cost advantage.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> Technologies built for failed consumer markets become the foundation of the next category — a repeatable dynamic. 'The graveyard of failed consumer tech is funding the next hardware wave — here is how to read the signal.'</div>
+          <a class="nl-link" href="https://www.lennysnewsletter.com/p/why-were-at-the-beginning-of-the" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="5">
+          <div class="nl-sender">Founder Unfiltered</div>
+          <div class="nl-subject"><a href="https://founderunfilteredchristinesong.substack.com/p/high-low-repeat" target="_blank">High. Low. Repeat.</a></div>
+          <div class="nl-summary">The founder emotional cycle is not a bug to fix but a structural feature of building from zero — rejection from someone who was never the right customer drops your optimism score; dry spells multiply the doubt; the gap between peak conviction and floor uncertainty is wider than any job description prepares you for. The founders who survive are not the ones who stop having those thoughts but the ones who recognize them as normal rather than diagnostic. One honest conversation in the right peer community closes more than a hundred cold pitches.</div>
+          <div class="nl-insight">The difference between a founder who stays in and one who quits is not confidence level — it is whether they have a peer group that normalizes the doubt so it does not feel like evidence of unworthiness.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> Directly maps to Table For One's audience. 'The emotional cycle nobody puts in the pitch deck — and why your worst days as a founder are actually proof you are doing it right.'</div>
+          <a class="nl-link" href="https://founderunfilteredchristinesong.substack.com/p/high-low-repeat" target="_blank">Read on Substack →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Art Break 3 ── -->
+    <div class="art-break" data-art-break="3">
+      <div class="art-frame" data-parallax>
+        <img class="art-img" src="https://www.artic.edu/iiif/2/6644829f-f292-c5c4-a73c-0356a6fdbf0d/full/1600,/0/default.jpg" alt="The Bedroom — Vincent van Gogh">
+      </div>
+      <div class="art-caption">
+        <div class="art-num">Plate III &nbsp;·&nbsp; Oil on canvas</div>
+        <div class="art-title">The Bedroom</div>
+        <div class="art-meta">Vincent van Gogh &nbsp;·&nbsp; 1889</div>
+        <p class="art-story">Van Gogh painted three versions of this bedroom, but the Art Institute's is the most quietly devastating — made while he was recovering in the Saint-Paul-de-Mausole asylum after his breakdown in Arles. He described the composition as expressing "absolute repose," which reads either as longing or as hard-won peace, depending on what you know about the months surrounding it. The tilted floor, bold black outlines, and simplified color were not decorative choices but a visual grammar he had developed specifically to carry emotional weight — to make a painting feel rather than merely depict.</p>
+      </div>
+    </div>
+
+    <!-- ── Art Break 4 ── -->
+    <div class="art-break art-break--flip" data-art-break="4">
+      <div class="art-frame" data-parallax>
+        <img class="art-img" src="https://www.artic.edu/iiif/2/3d2d0842-312e-8d48-708b-d6adde0777bf/full/1600,/0/default.jpg" alt="A Marine — George Inness">
+      </div>
+      <div class="art-caption">
+        <div class="art-num">Plate IV &nbsp;·&nbsp; Oil on canvas</div>
+        <div class="art-title">A Marine</div>
+        <div class="art-meta">George Inness &nbsp;·&nbsp; c. 1874–75</div>
+        <p class="art-story">Inness painted this seascape during a European trip, and unlike his Hudson River contemporaries who tended to aestheticize the ocean at a safe remove, he made weather you feel in your chest. His brushstrokes are rough and almost impatient — the kind of mark-making that suggests the storm moved through his hand without much negotiation. What separates Inness from the Luminists working alongside him is his refusal to beautify danger: in A Marine, the sea is not a beautiful thing that also happens to be powerful; it is simply powerful.</p>
+      </div>
+    </div>
+
+    <!-- Colophon -->
+    <footer class="colophon" data-reveal>
+      <div class="colophon-title"><em>Morning Brief</em></div>
+      <div class="colophon-tally">6 articles · 5 newsletters</div>
+      <div class="colophon-art">Nocturne: Blue and Gold—Southampton Water (Whistler) · Distant View of Niagara Falls (Cole) · The Bedroom (Van Gogh) · A Marine (Inness)</div>
+      <span class="colophon-mark"></span>
+      <div class="colophon-tally" style="margin-top:1.25rem">© 2026 · Assembled daily for Durva Mathure</div>
+    </footer>
+
+  </main>
+
+  <script>
+  (function () {
+    var mast = document.getElementById('mast');
+    var folioFill = document.querySelector('.folio-bar-fill');
+    var revealEls = document.querySelectorAll('[data-reveal]');
+    var audioEls = document.querySelectorAll('audio');
+    var ticking = false;
+
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }
+
+    function update() {
+      ticking = false;
+      var scrollTop = window.scrollY;
+      var docH = document.documentElement.scrollHeight - window.innerHeight;
+      var p = docH > 0 ? scrollTop / docH : 0;
+
+      // Folio bar
+      document.documentElement.style.setProperty('--p', p);
+
+      // Masthead compact
+      if (scrollTop > 80) mast.classList.add('is-compact');
+      else mast.classList.remove('is-compact');
+
+      // Reveal
+      var wH = window.innerHeight;
+      revealEls.forEach(function (el) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < wH * 0.88 || rect.bottom < 0) {
+          el.classList.add('is-in');
+        }
+      });
+
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+
+    // Audio players
+    audioEls.forEach(function (audio) {
+      var btn = audio.parentElement.querySelector('.play-btn');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var isPlaying = !audio.paused;
+        // Pause all others
+        audioEls.forEach(function (a) {
+          if (a !== audio) {
+            a.pause();
+            var b = a.parentElement.querySelector('.play-btn');
+            if (b) b.classList.remove('is-playing');
+          }
+        });
+        if (isPlaying) {
+          audio.pause();
+          btn.classList.remove('is-playing');
+        } else {
+          audio.play();
+          btn.classList.add('is-playing');
+        }
+      });
+      audio.addEventListener('ended', function () {
+        btn.classList.remove('is-playing');
+      });
+    });
+  })();
+  </script>
+
+</body>
+</html>

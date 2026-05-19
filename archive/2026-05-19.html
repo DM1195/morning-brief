@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morning Brief — Tuesday, May 19, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper: #f1ece1;
+      --ink: #1a1714;
+      --clay: #b85c3a;
+      --mute: #6e655a;
+      --rule: #bcb3a0;
+      --display: "Instrument Serif", Georgia, serif;
+      --body: "Geist", -apple-system, system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --col: min(680px, calc(100vw - 3rem));
+      --col-wide: min(900px, calc(100vw - 2rem));
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── Folio progress bar ── */
+    .folio-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--rule);
+      z-index: 100;
+    }
+    .folio-bar-fill {
+      display: block;
+      height: 100%;
+      width: calc(var(--p, 0) * 100%);
+      background: var(--clay);
+      transition: width 60ms linear;
+    }
+
+    /* ── Masthead ── */
+    .mast {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: var(--paper);
+      border-bottom: 1px solid var(--rule);
+      padding: 1.25rem max(1.5rem, calc((100vw - var(--col-wide)) / 2));
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: padding 300ms ease;
+    }
+    .mast.is-compact { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+
+    .mast-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mute);
+      white-space: nowrap;
+    }
+
+    .mast-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+    .mast-title .amp { font-style: normal; color: var(--clay); margin: 0 0.15em; }
+    .mast.is-compact .mast-title { font-size: clamp(1rem, 2.5vw, 1.4rem); }
+
+    .mast-date {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--mute);
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    /* ── Magazine body ── */
+    .mag { padding-bottom: 6rem; }
+
+    .section-inner {
+      max-width: var(--col);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .section-inner--wide {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ── Cover ── */
+    .cover {
+      padding: 6rem 1.5rem 5rem;
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .cover-kicker {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 1.5rem;
+    }
+
+    .cover-headline {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      max-width: 16ch;
+    }
+
+    .cover-stand {
+      font-size: 1.05rem;
+      color: var(--mute);
+      line-height: 1.65;
+      max-width: 52ch;
+      margin-bottom: 3rem;
+    }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem 2rem;
+      border-top: 1px solid var(--rule);
+      padding-top: 1.5rem;
+    }
+    .toc-item {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .toc-num {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--clay);
+      flex-shrink: 0;
+    }
+    .toc-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--mute);
+    }
+    .toc-item a { text-decoration: none; color: inherit; }
+    .toc-item a:hover .toc-label { color: var(--clay); }
+
+    /* ── Section shared ── */
+    .sec {
+      padding: 5rem 0 4rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .sec-header {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .sec-kicker {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.4rem;
+    }
+
+    .sec-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+    }
+
+    .sec-standfirst {
+      font-size: 0.85rem;
+      color: var(--mute);
+      line-height: 1.6;
+      max-width: 38ch;
+      text-align: right;
+      font-style: italic;
+    }
+
+    /* ── Reveal ── */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    [data-reveal].is-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    [data-reveal][data-delay="1"] { transition-delay: 80ms; }
+    [data-reveal][data-delay="2"] { transition-delay: 160ms; }
+    [data-reveal][data-delay="3"] { transition-delay: 240ms; }
+    [data-reveal][data-delay="4"] { transition-delay: 320ms; }
+    [data-reveal][data-delay="5"] { transition-delay: 400ms; }
+
+    /* ── News section ── */
+    .lead-article {
+      max-width: var(--col);
+      margin: 0 auto 3rem;
+      padding: 0 1.5rem;
+    }
+
+    .lead-topic {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.5rem;
+    }
+
+    .lead-headline {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .lead-headline a { color: inherit; text-decoration: none; }
+    .lead-headline a:hover { color: var(--clay); }
+
+    .lead-source {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--mute);
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.05em;
+    }
+
+    .lead-body { font-size: 0.95rem; line-height: 1.7; color: var(--ink); }
+
+    .lead-body p:first-child::first-letter {
+      font-family: var(--display);
+      font-size: 4.2em;
+      font-style: italic;
+      line-height: 0.72;
+      float: left;
+      margin: 0.05em 0.08em 0 0;
+      color: var(--clay);
+    }
+
+    .lead-aside {
+      border-left: 2px solid var(--clay);
+      padding-left: 1rem;
+      margin-top: 1.5rem;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .aside-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+    }
+
+    .aside-text { font-size: 0.88rem; color: var(--mute); line-height: 1.6; }
+
+    .news-grid {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    .news-card {
+      border-top: 1px solid var(--rule);
+      padding-top: 1rem;
+    }
+
+    .card-topic {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.4rem;
+    }
+
+    .card-headline {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      margin-bottom: 0.35rem;
+    }
+    .card-headline a { color: inherit; text-decoration: none; }
+    .card-headline a:hover { color: var(--clay); }
+
+    .card-source {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--mute);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    .card-summary { font-size: 0.85rem; color: var(--mute); line-height: 1.6; }
+
+    .card-link {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--clay);
+      text-decoration: none;
+    }
+    .card-link:hover { text-decoration: underline; }
+
+    /* ── Art break ── */
+    .art-break {
+      padding: 4rem 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 2.5rem;
+      max-width: var(--col-wide);
+      margin: 0 auto;
+    }
+    .art-break--flip { flex-direction: row-reverse; }
+
+    .art-frame {
+      flex: 0 0 auto;
+      width: min(320px, 42vw);
+      position: relative;
+      border-radius: 0;
+      border: 14px solid transparent;
+      background-image:
+        linear-gradient(var(--paper), var(--paper)),
+        linear-gradient(
+          135deg,
+          #dab840 0%, #f6e47c 9%,
+          #c07c18 20%, #d8aa3c 31%,
+          #a86c10 43%, #dab840 55%,
+          #f2d86c 67%, #bc8a1c 79%,
+          #dab840 100%
+        );
+      background-origin: padding-box, border-box;
+      background-clip: padding-box, border-box;
+      box-shadow:
+        0 0 0 1px rgba(78,46,0,0.45),
+        0 18px 52px rgba(26,23,20,0.28),
+        0 4px 14px rgba(26,23,20,0.14);
+    }
+    .art-frame::before {
+      content: "";
+      display: block;
+      padding-bottom: 125%;
+    }
+    .art-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,215,60,0.2),
+        inset 0 0 22px rgba(65,38,0,0.14);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .art-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .art-caption {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1rem 0;
+    }
+
+    .art-num {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 1rem;
+    }
+
+    .art-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      margin-bottom: 0.5rem;
+    }
+
+    .art-meta {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--mute);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.25rem;
+    }
+
+    .art-story { font-size: 0.88rem; color: var(--mute); line-height: 1.7; font-style: italic; max-width: 36ch; }
+
+    /* ── Social section ── */
+    .sentiment-bar-wrap {
+      max-width: var(--col);
+      margin: 0 auto 2.5rem;
+      padding: 0 1.5rem;
+    }
+
+    .sentiment-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mute);
+      margin-bottom: 0.5rem;
+    }
+
+    .sentiment-bar {
+      display: flex;
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      gap: 2px;
+    }
+
+    .sentiment-pos { background: #6a8f5c; }
+    .sentiment-neu { background: var(--rule); }
+    .sentiment-neg { background: var(--clay); }
+
+    .sentiment-legend {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--mute);
+      letter-spacing: 0.06em;
+    }
+    .legend-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-dot--pos { background: #6a8f5c; }
+    .legend-dot--neu { background: var(--rule); }
+    .legend-dot--neg { background: var(--clay); }
+
+    .pullquote {
+      max-width: var(--col);
+      margin: 0 auto 2.5rem;
+      padding: 0 1.5rem;
+      border-left: 3px solid var(--clay);
+    }
+
+    .pullquote-handle {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--clay);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .pullquote-text {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+
+    .pullquote-attr {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--mute);
+      letter-spacing: 0.05em;
+    }
+
+    .thread-list {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .thread-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      border-top: 1px solid var(--rule);
+      padding-top: 1rem;
+    }
+
+    .thread-platform {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+      flex-shrink: 0;
+      padding-top: 0.15rem;
+    }
+
+    .thread-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 0.3rem;
+    }
+    .thread-title a { color: inherit; text-decoration: none; }
+    .thread-title a:hover { color: var(--clay); }
+
+    .thread-signal { font-size: 0.8rem; color: var(--mute); line-height: 1.5; }
+
+    /* ── Substack section ── */
+    .substack-grid {
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .nl-card {
+      border-top: 1px solid var(--rule);
+      padding-top: 1rem;
+    }
+
+    .nl-sender {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.35rem;
+    }
+
+    .nl-subject {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+    }
+    .nl-subject a { color: inherit; text-decoration: none; }
+    .nl-subject a:hover { color: var(--clay); }
+
+    .nl-summary { font-size: 0.85rem; color: var(--mute); line-height: 1.6; margin-bottom: 0.75rem; }
+
+    .nl-insight {
+      font-size: 0.82rem;
+      color: var(--ink);
+      line-height: 1.55;
+      border-left: 2px solid var(--rule);
+      padding-left: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-style: italic;
+    }
+
+    .nl-angle {
+      font-size: 0.78rem;
+      color: var(--mute);
+      margin-bottom: 0.75rem;
+    }
+
+    .nl-link {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--clay);
+      text-decoration: none;
+    }
+    .nl-link:hover { text-decoration: underline; }
+
+    /* ── Podcast section ── */
+    .podcast-shell {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink);
+    }
+
+    .podcast-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.25;
+      transform: translateY(calc(var(--parY, 0) * 0.5px));
+      will-change: transform;
+    }
+
+    .podcast-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(26,23,20,0.6) 0%, rgba(26,23,20,0.85) 100%);
+    }
+
+    .podcast-inner {
+      position: relative;
+      z-index: 1;
+      max-width: var(--col-wide);
+      margin: 0 auto;
+      padding: 5rem 1.5rem;
+    }
+
+    .podcast-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 2rem;
+    }
+
+    .episode-list { display: grid; gap: 2rem; }
+
+    .episode-card {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 2rem;
+      background: rgba(241,236,225,0.04);
+      border: 1px solid rgba(241,236,225,0.1);
+      border-radius: 2px;
+      padding: 1.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .episode-card { grid-template-columns: 1fr; }
+    }
+
+    .episode-show {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 0.35rem;
+    }
+
+    .episode-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      color: var(--paper);
+      margin-bottom: 0.35rem;
+    }
+
+    .episode-pub {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: rgba(241,236,225,0.4);
+      letter-spacing: 0.06em;
+    }
+
+    .episode-summary { font-size: 0.85rem; color: rgba(241,236,225,0.75); line-height: 1.6; margin-bottom: 1rem; }
+
+    .episode-moments {
+      list-style: none;
+      display: grid;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .episode-moments li {
+      font-size: 0.82rem;
+      color: rgba(241,236,225,0.65);
+      line-height: 1.5;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .moment-ts {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--clay);
+      flex-shrink: 0;
+      padding-top: 0.15rem;
+    }
+
+    .episode-verdict {
+      font-size: 0.82rem;
+      color: rgba(241,236,225,0.55);
+      font-style: italic;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .audio-player {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .play-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(241,236,225,0.3);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 200ms, background 200ms;
+      flex-shrink: 0;
+    }
+    .play-btn:hover { border-color: var(--clay); background: rgba(184,92,58,0.15); }
+    .play-btn.is-playing { background: var(--clay); border-color: var(--clay); }
+
+    .play-icon {
+      display: block;
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 5px 0 5px 9px;
+      border-color: transparent transparent transparent rgba(241,236,225,0.8);
+      margin-left: 2px;
+    }
+    .play-btn.is-playing .play-icon {
+      width: 10px; height: 10px;
+      border: none;
+      background: rgba(241,236,225,0.8);
+      border-radius: 1px;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect x='0' y='0' width='3.5' height='10'/%3E%3Crect x='6.5' y='0' width='3.5' height='10'/%3E%3C/svg%3E");
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect x='0' y='0' width='3.5' height='10'/%3E%3Crect x='6.5' y='0' width='3.5' height='10'/%3E%3C/svg%3E");
+      margin-left: 0;
+    }
+
+    .podcast-episode-link {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(241,236,225,0.5);
+      text-decoration: none;
+    }
+    .podcast-episode-link:hover { color: var(--clay); }
+
+    /* ── Colophon ── */
+    .colophon {
+      max-width: var(--col);
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+      border-top: 1px solid var(--rule);
+      text-align: center;
+    }
+
+    .colophon-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--mute);
+      margin-bottom: 0.75rem;
+    }
+
+    .colophon-tally {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--mute);
+      margin-bottom: 0.5rem;
+    }
+
+    .colophon-art {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.06em;
+      color: var(--rule);
+      margin-bottom: 1.5rem;
+    }
+
+    .colophon-mark {
+      display: inline-block;
+      width: 1px;
+      height: 40px;
+      background: var(--rule);
+    }
+
+    /* ── Utility ── */
+    .printer-rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 0;
+    }
+
+    @media (max-width: 640px) {
+      .art-break {
+        flex-direction: column !important;
+        padding: 2.5rem 1.25rem;
+        gap: 1.5rem;
+      }
+      .art-frame {
+        width: 100%;
+        border-width: 10px;
+      }
+      .art-frame::before {
+        padding-bottom: 72%;
+      }
+      .cover-headline {
+        font-size: 2.2rem;
+      }
+      .episode-card {
+        grid-template-columns: 1fr;
+      }
+      .sec-header {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      .sec-standfirst {
+        text-align: left;
+        max-width: none;
+      }
+      .cover {
+        padding: 3.5rem 1.25rem 3rem;
+      }
+      .sec {
+        padding: 3.5rem 0 2.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .mast-eyebrow { display: none; }
+      .mast-date { display: none; }
+      .mast-title { font-size: 1.5rem !important; }
+      .news-grid,
+      .thread-list,
+      .substack-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Folio progress bar -->
+  <div class="folio-bar"><span class="folio-bar-fill"></span></div>
+
+  <!-- Masthead -->
+  <header class="mast" id="mast">
+    <div class="mast-eyebrow">Vol. I &nbsp;·&nbsp; No. 19</div>
+    <h1 class="mast-title"><em>Morning</em><span class="amp"> / </span><em>Brief</em></h1>
+    <div class="mast-date">TUESDAY, MAY 19, 2026</div>
+  </header>
+
+  <main class="mag">
+
+    <!-- Cover -->
+    <section class="cover" data-reveal>
+      <div class="cover-kicker">Today's Intelligence &nbsp;·&nbsp; 6 articles · 10 newsletters · 1 episode</div>
+      <h2 class="cover-headline">The Market Concentrates. The Solo Founder Doesn't.</h2>
+      <p class="cover-stand">VC concentration just hit a record — 80% of 2026 capital to 29 companies — while a solo founder exited for $80M with zero employees. OpenAI entered enterprise services. The mood in founder circles is aspirational but sober about who the recovery actually includes.</p>
+      <nav class="toc">
+        <div class="toc-item"><span class="toc-num">01</span><a href="#sec-news"><span class="toc-label">Industry News</span></a></div>
+        <div class="toc-item"><span class="toc-num">02</span><a href="#sec-social"><span class="toc-label">Social Pulse</span></a></div>
+        <div class="toc-item"><span class="toc-num">03</span><a href="#sec-substack"><span class="toc-label">Substack Brief</span></a></div>
+        <div class="toc-item"><span class="toc-num">04</span><a href="#sec-podcast"><span class="toc-label">On Air</span></a></div>
+      </nav>
+    </section>
+
+    <!-- ── Section I: Industry News ── -->
+    <section class="sec sec--news" id="sec-news">
+      <div class="sec-header">
+        <div>
+          <div class="sec-kicker">Section I</div>
+          <h2 class="sec-title">Industry News</h2>
+        </div>
+        <p class="sec-standfirst">The funding map has never looked less linear — record VC concentration meets solo founder exits.</p>
+      </div>
+
+      <!-- Lead article -->
+      <div class="lead-article" data-reveal>
+        <div class="lead-topic">STARTUP FUNDRAISING VENTURE CAPITAL</div>
+        <h3 class="lead-headline"><a href="https://news.crunchbase.com/venture/data-capital-concentrating-faster-startups-100m-ai/" target="_blank">Venture Capital Is Concentrating Faster Than Ever. What Happens To Everyone Else?</a></h3>
+        <div class="lead-source">CRUNCHBASE NEWS · Today</div>
+        <div class="lead-body">
+          <p>In 2025, 70% of all U.S. venture capital went to just 389 companies raising $100 million or more — with $90 billion alone absorbed by six companies that each cleared $5 billion in a single raise. Through April 2026, the trend is accelerating: 80% of available capital has gone to 29 companies raising $500 million and up, leaving roughly 6,000 startups to divide what remains. The round that used to bridge early-stage founders to growth-stage — the $100M–$500M tier — has effectively collapsed as a competitive market, with 770 companies competing for it in 2021 versus a fraction today. Investors on the ground still talk up seed and Series A as vibrant white space, but that framing papers over the structural reality: the ladder between early promise and real scale is gone for most non-AI founders.</p>
+        </div>
+        <div class="lead-aside">
+          <div>
+            <div class="aside-label">Claude's Take</div>
+            <div class="aside-text">The VC ladder is broken for most founders — this isn't a cycle, it's structural redistribution toward AI incumbents. If you're building B2B SaaS, price your strategy around reaching profitability or acquisition readiness before a Series A, not raising one.</div>
+          </div>
+          <div>
+            <div class="aside-label">Content Angle</div>
+            <div class="aside-text">Substack: 'The VC ladder is gone. Here's what the funding map actually looks like in 2026.' Use the Crunchbase data as the anchor — 6 companies absorbed $90B while 6,000 companies shared $88B — then reframe for solo founders: what does that math mean for your raise strategy, and where do grants, revenue-first, and bootstrapping fit?</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- News grid -->
+      <div class="news-grid">
+        <div class="news-card" data-reveal data-delay="1">
+          <div class="card-topic">CREATOR ECONOMY SOLO FOUNDER</div>
+          <div class="card-headline"><a href="https://fortune.com/2026/05/18/solo-founders-ai-automation-entire-teams-entrepreneurs/" target="_blank">Solo founders are using AI to do the work of entire teams — but going it alone has limits</a></div>
+          <div class="card-source">FORTUNE · Yesterday</div>
+          <div class="card-summary">Maor Shlomo built Base44 in four months, hit $1.5M in subscription revenue in his first month, and sold to Wix for $80M — still the only full-time employee at acquisition. Dana Snyder, a nonprofit consultant, used Replit's AI tools to automate monthly giving programs for the 93% of U.S. nonprofits too small to afford human consultants. Real limits are named clearly: AI bills can reach hundreds of thousands monthly, burnout is significant, and complex compliance still requires humans. There are now 41 million solopreneurs in the U.S. generating $1.7 trillion in revenue.</div>
+          <a class="card-link" href="https://fortune.com/2026/05/18/solo-founders-ai-automation-entire-teams-entrepreneurs/" target="_blank">Read →</a>
+        </div>
+        <div class="news-card" data-reveal data-delay="2">
+          <div class="card-topic">FRONTIER AI STARTUP ADOPTION</div>
+          <div class="card-headline"><a href="https://thenextweb.com/news/tomoro-openai-deployment-company-consulting" target="_blank">OpenAI Launches $4 Billion Deployment Company to Accelerate Enterprise AI Adoption, Acquires Tomoro</a></div>
+          <div class="card-source">THE NEXT WEB · May 11</div>
+          <div class="card-summary">OpenAI launched a majority-owned subsidiary backed by $4B from 19 firms led by TPG, acquiring applied AI consulting firm Tomoro with 150 Forward Deployed Engineers already embedded at Fidelity International, Virgin Atlantic, Tesco, and the NBA. Enterprise now represents over 40% of OpenAI's revenue. For B2B SaaS founders, this signals both real enterprise budget tailwinds and a direct competitive threat in the workflow automation layer.</div>
+          <a class="card-link" href="https://thenextweb.com/news/tomoro-openai-deployment-company-consulting" target="_blank">Read →</a>
+        </div>
+        <div class="news-card" data-reveal data-delay="3">
+          <div class="card-topic">SMALL BUSINESS POLICY</div>
+          <div class="card-headline"><a href="https://www.brookings.edu/articles/from-policy-volatility-to-stability-and-growth-rebuilding-the-foundations-for-latino-entrepreneurs-and-small-businesses/" target="_blank">From Policy Volatility to Stability and Growth: Rebuilding the Foundations for Latino Entrepreneurs and Small Businesses</a></div>
+          <div class="card-source">BROOKINGS · Yesterday</div>
+          <div class="card-summary">Federal policy volatility — tariffs, expanded immigration enforcement, SBA cuts — is systematically destabilizing 495,000 Latino-owned employer firms generating $730B annually. In LA, 82% of businesses reported enforcement-related disruptions and 44% lost over half their revenue. In Chicago, 95% of corridor businesses reported declining sales. The 287(g) enforcement agreements grew 64% between October 2025 and April 2026.</div>
+          <a class="card-link" href="https://www.brookings.edu/articles/from-policy-volatility-to-stability-and-growth-rebuilding-the-foundations-for-latino-entrepreneurs-and-small-businesses/" target="_blank">Read →</a>
+        </div>
+        <div class="news-card" data-reveal data-delay="4">
+          <div class="card-topic">WOMEN FOUNDER GRANTS FUNDING</div>
+          <div class="card-headline"><a href="https://femtechinsider.com/four-new-funds-womens-health-founders-should-know-about/" target="_blank">Four New Funds Women's Health Founders Should Know About</a></div>
+          <div class="card-source">FEMTECH INSIDER · May 11</div>
+          <div class="card-summary">Four institutional funds newly available to women's health and female-founded startups: TechThrive Ventures ($7M pre-seed, consumer health/longevity); Wisdom Ventures Fund II ($77.7M, 40 AI-enabled health startups at $1–5M checks); Arãya Sie Fund (first close £7.5M, writing £100K–£300K checks to female-founded AI and deeptech); and a £1M British Business Bank co-investment paired with Angel Academe for seed-to-Series A with at least one female founder.</div>
+          <a class="card-link" href="https://femtechinsider.com/four-new-funds-womens-health-founders-should-know-about/" target="_blank">Read →</a>
+        </div>
+        <div class="news-card" data-reveal data-delay="5">
+          <div class="card-topic">AI POLICY REGULATION</div>
+          <div class="card-headline"><a href="https://www.hrleader.com.au/tech/27700-regulation-failing-to-sufficiently-address-workplace-harm-from-ai" target="_blank">Are We Getting Workplace AI Regulation All Wrong?</a></div>
+          <div class="card-source">HR LEADER · Yesterday</div>
+          <div class="card-summary">Research from Flinders University argues Australia's AI regulatory apparatus fails to address workplace-specific harms — surveillance, hiring bias, performance monitoring — because existing frameworks lack legally binding, workplace-specific mechanisms. Recommended: mandatory disclosure before deploying any AI in a workplace, a federal AI commissioner, and enforceable employer-worker agreements. For B2B SaaS founders building AI tools that touch HR or employee communications, consent and disclosure requirements are coming.</div>
+          <a class="card-link" href="https://www.hrleader.com.au/tech/27700-regulation-failing-to-sufficiently-address-workplace-harm-from-ai" target="_blank">Read →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Art Break 1 ── -->
+    <div class="art-break" data-art-break="1">
+      <div class="art-frame" data-parallax>
+        <img class="art-img" src="https://www.artic.edu/iiif/2/d55b0cfc-0716-d6cd-3b38-5742903ce046/full/1600,/0/default.jpg" alt="Mountain Brook — Albert Bierstadt">
+      </div>
+      <div class="art-caption">
+        <div class="art-num">Plate I &nbsp;·&nbsp; Oil on canvas</div>
+        <div class="art-title">Mountain Brook</div>
+        <div class="art-meta">Albert Bierstadt &nbsp;·&nbsp; 1863</div>
+        <p class="art-story">When critics called this Bierstadt's "best work" in 1863, what they were praising was a composed lie — the Flume in New Hampshire rendered as imaginary wilderness, a tourist attraction transformed into untouched nature myth. The painting's realism is total but its subject is invented, assembled from landscape elements Bierstadt rearranged the way a writer edits a sentence. He was doing for the White Mountains what we now do with photography: a selective edit of experience so convincing it becomes more real than the thing it depicts.</p>
+      </div>
+    </div>
+
+    <!-- ── Section II: Social Pulse ── -->
+    <section class="sec sec--social" id="sec-social">
+      <div class="sec-header">
+        <div>
+          <div class="sec-kicker">Section II</div>
+          <h2 class="sec-title">Social Pulse</h2>
+        </div>
+        <p class="sec-standfirst">Founders are riding the AI-leverage high while quietly stress-testing whether the math applies to them.</p>
+      </div>
+
+      <!-- Sentiment bar -->
+      <div class="sentiment-bar-wrap" data-reveal>
+        <div class="sentiment-label">Online sentiment — founders &amp; builders</div>
+        <div class="sentiment-bar">
+          <div class="sentiment-pos" style="flex: 52"></div>
+          <div class="sentiment-neu" style="flex: 28"></div>
+          <div class="sentiment-neg" style="flex: 20"></div>
+        </div>
+        <div class="sentiment-legend">
+          <span class="legend-item"><span class="legend-dot legend-dot--pos"></span>Positive</span>
+          <span class="legend-item"><span class="legend-dot legend-dot--neu"></span>Neutral</span>
+          <span class="legend-item"><span class="legend-dot legend-dot--neg"></span>Negative</span>
+        </div>
+      </div>
+
+      <!-- Pull quote -->
+      <div class="pullquote" data-reveal data-delay="1">
+        <div class="pullquote-handle">@MS_BASE44 on Twitter/X</div>
+        <blockquote class="pullquote-text">"3 weeks from $0 to $1M ARR. Solo. Bootstrapped. No VC."</blockquote>
+        <div class="pullquote-attr">— 723 likes · 426 retweets · Maor Shlomo, founder Base44 ($80M exit to Wix)</div>
+      </div>
+
+      <!-- Threads -->
+      <div class="thread-list">
+        <div class="thread-item" data-reveal data-delay="1">
+          <div class="thread-platform">Twitter/X</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://x.com/solofounding/status/1935506535997661275" target="_blank">Solo founder, $80M exit, 6 months — bootstrapped, zero VC, built with AI</a></div>
+            <div class="thread-signal">The Base44/Wix story is the dominant social signal this week: founders are oscillating between genuine inspiration and quiet anxiety, asking whether this is a repeatable playbook or survivorship bias. The emotional undercurrent is aspirational but tinged with self-awareness — most know they are not Maor Shlomo, but they want to believe the path exists.</div>
+          </div>
+        </div>
+        <div class="thread-item" data-reveal data-delay="2">
+          <div class="thread-platform">Web / Fortune</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://fortune.com/2026/05/18/solo-founders-ai-automation-entire-teams-entrepreneurs/" target="_blank">Solo founders are using AI to do the work of entire teams — but going it alone has real limits</a></div>
+            <div class="thread-signal">Fortune's May 18 piece is circulating hard in founder Discords and Reddit threads: excitement about AI leverage is real, but the hidden costs (server alarms every 2–3 hours, AI bills rivaling payroll) are landing as a cold-water moment. The community mood is capability-optimistic but honest that solo success is a full-body commitment, not a shortcut.</div>
+          </div>
+        </div>
+        <div class="thread-item" data-reveal data-delay="3">
+          <div class="thread-platform">Reddit</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://www.reddit.com/r/venturecapital/" target="_blank">$340B VC deployed in 2025 but deal count fell 15% — top 1% captured a third of all capital</a></div>
+            <div class="thread-signal">SVB's 2026 State of Markets data is spreading through VC-adjacent communities: only 3% of seed companies graduate to Series A within 12 months, and the bottom 50% of startups got just 7% of capital. The emotional register is sober frustration — founders who are not AI-native are realizing the recovery narrative does not apply to them.</div>
+          </div>
+        </div>
+        <div class="thread-item" data-reveal data-delay="4">
+          <div class="thread-platform">Substack</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://rationalreturns.substack.com/p/a-note-to-founders-raising-in-2026" target="_blank">A note to founders raising in 2026: most decks are built on a consumer that no longer exists</a></div>
+            <div class="thread-signal">Investor Valentina's note is landing with unusual weight: consumer confidence hit its lowest since 2014 in January 2026, and founders are baking macro optimism into year-two models that VCs are quietly stress-testing. The vibe is foreboding realism — raise now, but model the recession scenario before anyone asks you to.</div>
+          </div>
+        </div>
+        <div class="thread-item" data-reveal data-delay="5">
+          <div class="thread-platform">Twitter/X</div>
+          <div class="thread-body">
+            <div class="thread-title"><a href="https://x.com/solofounding/status/2018478113773224122" target="_blank">Fundraising as a Solo Founder: The Data Proves You Won't Pay a 'Solo Tax'</a></div>
+            <div class="thread-signal">A data thread showing solo and multi-founder companies experienced nearly identical dilution from pre-seed through Series B is resonating strongly — 48% of angels backed at least one solo venture in 2025. Founders feel vindicated that the "you need a co-founder" pressure was more VC convention than evidence.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Art Break 2 ── -->
+    <div class="art-break art-break--flip" data-art-break="2">
+      <div class="art-frame" data-parallax>
+        <img class="art-img" src="https://www.artic.edu/iiif/2/a34d9d72-c4ec-0750-389e-a01215c9aab0/full/1600,/0/default.jpg" alt="Pastoral Landscape with Ruins — Adriaen van de Velde">
+      </div>
+      <div class="art-caption">
+        <div class="art-num">Plate II &nbsp;·&nbsp; Oil on canvas</div>
+        <div class="art-title">Pastoral Landscape with Ruins</div>
+        <div class="art-meta">Adriaen van de Velde &nbsp;·&nbsp; 1664</div>
+        <p class="art-story">A Dutch painter who never went to Italy painted the Italian countryside from imagination, and his patrons believed it entirely — because the fantasy of rural peace is more durable than any actual landscape. Van de Velde built this from cattle sketches made in Amsterdam pastures and studio studies of human figures, then assembled the scene like a stage set. The Roman ruins exist; the warm southern light is invented; and the whole thing is true in the way all good idealization is true — it shows you what you wish were real, and that feeling passes for memory.</p>
+      </div>
+    </div>
+
+    <!-- ── Section III: Substack Brief ── -->
+    <section class="sec sec--substack" id="sec-substack">
+      <div class="sec-header">
+        <div>
+          <div class="sec-kicker">Section III</div>
+          <h2 class="sec-title">Substack Brief</h2>
+        </div>
+        <p class="sec-standfirst">From subscription-as-valuation-strategy to AI search visibility — your newsletters are circling infrastructure this week.</p>
+      </div>
+      <div class="substack-grid">
+        <div class="nl-card" data-reveal data-delay="1">
+          <div class="nl-sender">Write2Sell (Yana G-Y)</div>
+          <div class="nl-subject"><a href="https://www.yana-g-y.com/p/how-ellen-scherr-built-6000-month-substack" target="_blank">Write2Sell Case Study: How Ellen Scherr Built a $6,079/Month Substack Business in Mental Health</a></div>
+          <div class="nl-summary">A licensed therapist with no online writing history grew a mental health Substack from 245 to 22,475 subscribers and $6,079/month using five compounding elements: sharp positioning, funnel infrastructure built before traffic, a content engine designed to replicate virality, disciplined implementation, and a layered monetization stack. One post about the neuroscience of people-pleasing went viral enough for Oprah Daily to pick it up — but that virality only converted because the subscription funnel was already in place. The author uses Ellen's story (she's 71 and pushed through surgery and interstate moves to keep publishing) to argue that discipline, not strategy, is the real differentiator.</div>
+          <div class="nl-insight">Viral traffic bounces unless you've built the conversion infrastructure before the wave hits — the post that goes viral is the last piece, not the first.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> 'What I Built Before I Launched' — the unsexy pre-launch infrastructure (welcome sequence, offer stack, positioning clarity) that most solo founders skip.</div>
+          <a class="nl-link" href="https://www.yana-g-y.com/p/how-ellen-scherr-built-6000-month-substack" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="2">
+          <div class="nl-sender">Substack On</div>
+          <div class="nl-subject"><a href="https://on.substack.com/p/scott-galloway-had-the-audience-heres" target="_blank">Scott Galloway had the audience. Here's what he came for.</a></div>
+          <div class="nl-summary">Scott Galloway moved Prof G Media's full newsletter portfolio to Substack in March 2026, and the strategic rationale is purely about enterprise value: podcast revenue carries a 2–3x multiple, while subscription revenue carries a 4–6x multiple, so adding even $1M ARR in subscriptions disproportionately raises the company's valuation floor. His core argument about platform dependency is blunt — every platform eventually turns your margin into their opportunity. On AI, he's a skeptic: he thinks the labor-apocalypse framing is a fundraising technique and treats AI internally as a research tool rather than a creation tool.</div>
+          <div class="nl-insight">Your margin is their opportunity — any business built on a platform that controls distribution should plan for the day the platform extracts it.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> 'Why I'm Building an Owned Audience Before I Have One' — use Galloway's multiple-arbitrage logic to argue that subscription revenue is worth 2–3x more per dollar than ad revenue when you go to raise or sell.</div>
+          <a class="nl-link" href="https://on.substack.com/p/scott-galloway-had-the-audience-heres" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="3">
+          <div class="nl-sender">Digital Native</div>
+          <div class="nl-subject"><a href="https://www.digitalnative.tech/p/nourish-and-the-decade-of-consumer" target="_blank">Nourish and the Decade of Consumer Health</a></div>
+          <div class="nl-summary">Nourish, a $1B+ telenutrition startup, cracked the healthcare triangle by making three contrarian bets: employing dietitians as W2 workers instead of 1099, building a 100-person field sales team to generate provider referrals, and going through insurance from day one. The result is 200M covered lives across 60+ payer contracts, 3x year-over-year patient growth, and proven ROI of $2,001 per member per year in savings for health plans. The roadmap is to expand into a full-stack metabolic clinic taking on value-based care risk — becoming the healthcare system built around preventing chronic disease rather than treating it reactively.</div>
+          <div class="nl-insight">Going through insurance from day one is slower and harder, but it's the only path to a healthcare company with an unlimited TAM — cash-pay health startups cap themselves.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> 'The Infrastructure Play Nobody Talks About in Women's Health' — apply Nourish's W2/payer/provider triangle logic to femtech and why the payer-contracting infrastructure is the real opportunity.</div>
+          <a class="nl-link" href="https://www.digitalnative.tech/p/nourish-and-the-decade-of-consumer" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="4">
+          <div class="nl-sender">Firestarter Forum</div>
+          <div class="nl-subject"><a href="https://firestarterforum.substack.com/p/ai-search-wont-recommend-your-business" target="_blank">AI Search Won't Recommend Your Business. Here's Why (and the 15-Minute Fix)</a></div>
+          <div class="nl-summary">ChatGPT recommends only 1.2% of local businesses, Perplexity 7.4%, and Gemini 11% — and the businesses getting recommended didn't get there by accident. AI search platforms pull from the same signals as traditional SEO but the consequence of absence is now more severe: there is no page two in an AI recommendation, just a short list and a decision. The fix is specificity — rewriting copy to answer the exact questions AI engines are trained to surface rather than generic welcome copy that reads as noise to an LLM. The window to act is narrow because most competitors haven't moved on this yet.</div>
+          <div class="nl-insight">You are no longer optimizing your website for humans who scan links — you are optimizing for an AI that reads your page at 2am to decide whether to recommend you at 9am.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> 'Is Your Substack AI-Searchable?' — apply this logic to newsletter discoverability: your About page and post titles need to be written for LLMs recommending newsletters to new readers.</div>
+          <a class="nl-link" href="https://firestarterforum.substack.com/p/ai-search-wont-recommend-your-business" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="5">
+          <div class="nl-sender">a16z Newsletter</div>
+          <div class="nl-subject"><a href="https://www.a16z.news/p/need-series-c-call-a16z" target="_blank">Need Series C? Call a16z</a></div>
+          <div class="nl-summary">The piece uses plaintiff attorneys as a lens for understanding AI adoption: personal injury law succeeded by solving the unit economics problem of making legal services accessible at scale, and that same architecture is what AI promises across dozens of industries. Three non-obvious observations: in an AI-mediated world, customer acquisition may depend less on comparative merit and more on LLM recall — whoever the model "remembers first" in a moment of need wins. Contingency-fee models (pay only if we win) are the consumer business model most aligned with how AI value actually gets delivered. Brazil's small-claims court ecosystem is already a preview of what happens when dispute costs drop dramatically.</div>
+          <div class="nl-insight">In an AI-mediated world, who the LLM recalls first in a moment of need may matter more than your actual product quality — recall is the new moat.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> 'The Business Model Nobody in AI Talks About' — contingency-fee AI (pay only on success outcomes) as the model most aligned with how AI actually creates value.</div>
+          <a class="nl-link" href="https://www.a16z.news/p/need-series-c-call-a16z" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="1">
+          <div class="nl-sender">MTS Live</div>
+          <div class="nl-subject"><a href="https://mtslive.substack.com/p/leopold-drops-the-13f-musk-loses" target="_blank">Leopold drops the 13F, Musk loses the case</a></div>
+          <div class="nl-summary">Leopold Aschenbrenner's hedge fund Situational Awareness LP filed a Q1 2026 13F showing $13.7B in reported notional value — up 148% from the prior quarter and a 54x increase from its debut. The fund's thesis splits two ways: over 60% of notional is in put options on AI hardware structured as crash insurance, while the long book bets on the physical infrastructure layer underneath GPUs — power (Bloom Energy), memory (SanDisk), GPU cloud (CoreWeave), and Bitcoin miners pivoting to AI compute hosting. Separately: Cursor launched Composer 2.5 built on Kimi K2.5, achieving Opus 4.7-level performance at 10–20x lower cost.</div>
+          <div class="nl-insight">The smartest AI insider with real money on the line is simultaneously shorting GPU hardware and going long on power and cooling — the bet is that electricity and land, not chips, are the next AI bottleneck.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> 'What the AI Money Is Actually Betting On' — use Aschenbrenner's 13F as a frame to argue that energy and physical compute hosting, not model companies, is the real AI infrastructure play for the next 5 years.</div>
+          <a class="nl-link" href="https://mtslive.substack.com/p/leopold-drops-the-13f-musk-loses" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="2">
+          <div class="nl-sender">Always Running Hot / Unbecoming</div>
+          <div class="nl-subject"><a href="https://alwaysrunninghot.substack.com/p/my-hobbies-have-a-theme-i-didnt-see" target="_blank">My hobbies have a theme. I didn't see it until it kicked me in the face.</a></div>
+          <div class="nl-summary">After cataloguing her hobbies in a ChatGPT session, the author recognized a single unifying theme: everything she does with her free time is about making something come to life. The essay argues that your hobbies are not random escapes but data signals about what you need emotionally and psychologically in the current season of your life. In midlife specifically, there is an underacknowledged hunger to build and create that has nothing to do with career outcomes. People drawn to building may need evidence they're still someone who creates, at a time when the body is changing and time feels newly finite.</div>
+          <div class="nl-insight">Your hobbies are not what you do when you have nothing to do — they are what you reach for when nobody is asking anything of you, which makes them the most honest data you have about what you actually need.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> 'What Your Business Reveals About What You Need' — flip the hobby-as-data-signal framework onto solo founder business choices, arguing that what you decide to build tells you something about your underlying psychological needs that a business plan never surfaces.</div>
+          <a class="nl-link" href="https://alwaysrunninghot.substack.com/p/my-hobbies-have-a-theme-i-didnt-see" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="3">
+          <div class="nl-sender">Anjeanette Carter</div>
+          <div class="nl-subject"><a href="https://anjeanettecarter.substack.com/p/the-1" target="_blank">The 1%</a></div>
+          <div class="nl-summary">After reaching Substack bestseller status 11 months in, the author breaks down the pattern behind reaching top 1% on six separate platforms — Fiverr ($1M+ earned), YouTube (250K subscribers), Twitter (30K, named by TIME), Upwork ($200K), LinkedIn (25K), and now Substack — without celebrity status or an existing cross-platform audience. The formula is unglamorous: discipline through "the boring middle" when numbers don't move, platform study, and single-platform focus. The key psychological reframe is that belief gets you to start, but discipline carries you through the long flat line that precedes every hockey stick — and that flat line is where nearly everyone quits.</div>
+          <div class="nl-insight">The flat line before the hockey stick is not evidence the strategy is wrong — it is the exact place where your competition quits, which means staying has the highest return.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> 'I Spent 6 Months Publishing to Almost Nobody. Here's What That Built.' — a founder-voice piece using the 'boring middle' frame to argue that consistency through low-signal phases is a competitive moat, not a sign of failure.</div>
+          <a class="nl-link" href="https://anjeanettecarter.substack.com/p/the-1" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="4">
+          <div class="nl-sender">Human Learning</div>
+          <div class="nl-subject"><a href="https://humanlearning.substack.com/p/i-started-a-new-job-heres-what-happened" target="_blank">How to Use AI to Ramp Up in a New Job (Without Drowning in Outputs)</a></div>
+          <div class="nl-summary">Three weeks into a new PM role, the author discovered that "dump and pray" AI prompting — firing questions at raw data without scaffolding — produces an exhausting avalanche of outputs with no way to evaluate which threads matter. The fix was to do the analytical thinking first: build a template with exactly the metrics that matter, collect a source-of-truth report, write down hypotheses before touching data, and only then bring AI in with specific instructions. This approach took the same four hours but produced a trustworthy, reusable report. The metaphor: AI is the kid who wants to crouch and look at sidewalk bugs; your job is to hold the destination and the clock.</div>
+          <div class="nl-insight">AI without scaffolding produces the feeling of productivity without the substance of it — the human's job is not to prompt better but to do the thinking before the session starts.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> 'The AI Workflow That Actually Works for Early-Stage Founders' — apply this scaffolding-first framework to the specific analytics problems founders face (customer cohort analysis, unit economics, churn investigation).</div>
+          <a class="nl-link" href="https://humanlearning.substack.com/p/i-started-a-new-job-heres-what-happened" target="_blank">Read on Substack →</a>
+        </div>
+        <div class="nl-card" data-reveal data-delay="5">
+          <div class="nl-sender">Data But Make It Fashion</div>
+          <div class="nl-subject"><a href="https://www.databutmakeitfashion.com/p/on-talking-about-and-analyzing-fashion" target="_blank">On Talking About And Analyzing Fashion Online</a></div>
+          <div class="nl-summary">A data analyst built a fashion-data Instagram account by carving out a specific niche at the intersection of two fields — data analytics and fashion — creating opportunity in an industry she had no traditional entry point into. The core argument: the question isn't whether there's space for more fashion content (fashion intersects with everything), but whether you can answer "why would someone pick me?" with something specific and defensible. For this author, that specificity is quantitative brand-sentiment analysis after runway shows. Speed is also an underrated competitive advantage — commentary that arrives first shapes the narrative even if it's less polished than what comes later.</div>
+          <div class="nl-insight">Knowing specifically what you're bad at is as strategically important as knowing what you're good at — your weaknesses define the territory you should cede so you can dominate where you're genuinely distinct.</div>
+          <div class="nl-angle"><strong>Content angle:</strong> 'How I Decided What Table For One Is NOT About' — a meta-piece on defining a newsletter's negative space, arguing that sharp editorial exclusions are what make a niche feel like a destination.</div>
+          <a class="nl-link" href="https://www.databutmakeitfashion.com/p/on-talking-about-and-analyzing-fashion" target="_blank">Read on Substack →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Art Break 3 ── -->
+    <div class="art-break" data-art-break="3">
+      <div class="art-frame" data-parallax>
+        <img class="art-img" src="https://www.artic.edu/iiif/2/3c27b499-af56-f0d5-93b5-a7f2f1ad5813/full/1600,/0/default.jpg" alt="Water Lilies — Claude Monet">
+      </div>
+      <div class="art-caption">
+        <div class="art-num">Plate III &nbsp;·&nbsp; Oil on canvas</div>
+        <div class="art-title">Water Lilies</div>
+        <div class="art-meta">Claude Monet &nbsp;·&nbsp; 1906</div>
+        <p class="art-story">Monet called the water lily paintings "an obsession" — not a compliment to himself. Technical examination reveals he repainted this canvas many times; what looks like effortless immediacy is the residue of relentless revision. He was eliminating the sky and horizon deliberately, trying to remove the reference points that tell you which way is up — so that standing in front of it, you lose your orientation slightly. That was the point: a painting that floats, that refuses to give you stable ground, that asks you to surrender spatial certainty before it will show you anything.</p>
+      </div>
+    </div>
+
+    <!-- ── Section IV: Podcasts ── -->
+    <section class="sec sec--podcast" id="sec-podcast">
+      <div class="sec-header">
+        <div>
+          <div class="sec-kicker">Section IV</div>
+          <h2 class="sec-title">On Air</h2>
+        </div>
+        <p class="sec-standfirst">What's worth your ears this week.</p>
+      </div>
+      <div class="podcast-shell">
+        <img class="podcast-bg" src="https://www.artic.edu/iiif/2/48b2de88-ba73-8e19-f448-d1cef4a1c847/full/1600,/0/default.jpg" alt="painting">
+        <div class="podcast-overlay"></div>
+        <div class="podcast-inner">
+          <div class="podcast-eyebrow">Podcast Highlights</div>
+          <div class="episode-list">
+            <div class="episode-card" data-reveal>
+              <div class="episode-meta">
+                <div class="episode-show">Crimes of the Times (L.A. Times Studios)</div>
+                <div class="episode-title">The Assassination of RFK</div>
+                <div class="episode-pub">Today · 37:32</div>
+              </div>
+              <div class="episode-body">
+                <div class="episode-summary">This episode revisits the 1968 assassination of Robert F. Kennedy, arguing that the public's understanding of Sirhan Sirhan's actual motives has largely been lost to history. The hosts examine how collective amnesia around motive — not just fact — is what has allowed conspiracy theories to take hold and flourish for decades. The core argument is that ignoring motive creates a vacuum that misinformation fills.</div>
+                <ul class="episode-moments">
+                  <li><span class="moment-ts">09:20</span>Establishes the central thesis: Sirhan Sirhan's documented motives have faded from public consciousness, creating conditions for conspiracy theories to emerge.</li>
+                  <li><span class="moment-ts">18:46</span>Deep dive into the historical record — what witnesses and investigators actually documented at the time versus what became contested later.</li>
+                  <li><span class="moment-ts">28:06</span>Examines how specific conspiracy theories filled the motive vacuum over the decades, tracing their origins and spread.</li>
+                  <li><span class="moment-ts">37:32</span>Closes with a broader argument about collective memory and why high-profile political violence is uniquely vulnerable to revisionist narratives.</li>
+                </ul>
+                <div class="episode-verdict">Skip unless you're drawn to true crime or media studies — and note that the podcast feed (feeds.simplecast.com/C0h5kjnu) in your config.json appears misconfigured; consider replacing it with a founder-focused feed.</div>
+                <div class="audio-player">
+                  <audio src="https://pdrl.fm/04e39b/pscrb.fm/rss/p/claritaspod.com/measure/tracking.swap.fm/track/l7UHKpkhi4bKJvef7xe6/injector.simplecastaudio.com/db2cd629-e229-416c-83b0-1f55224f43b3/episodes/b284b98f-3160-448d-bf7a-dacf887bda64/audio/128/default.mp3" preload="none"></audio>
+                  <button class="play-btn" aria-label="Play episode"><span class="play-icon"></span></button>
+                  <a class="podcast-episode-link" href="https://pdrl.fm/04e39b/pscrb.fm/rss/p/claritaspod.com/measure/tracking.swap.fm/track/l7UHKpkhi4bKJvef7xe6/injector.simplecastaudio.com/db2cd629-e229-416c-83b0-1f55224f43b3/episodes/b284b98f-3160-448d-bf7a-dacf887bda64/audio/128/default.mp3">↓ Episode</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Art Break 4 ── -->
+    <div class="art-break art-break--flip" data-art-break="4">
+      <div class="art-frame" data-parallax>
+        <img class="art-img" src="https://www.artic.edu/iiif/2/48b2de88-ba73-8e19-f448-d1cef4a1c847/full/1600,/0/default.jpg" alt="The Song of the Lark — Jules Breton">
+      </div>
+      <div class="art-caption">
+        <div class="art-num">Plate IV &nbsp;·&nbsp; Oil on canvas</div>
+        <div class="art-title">The Song of the Lark</div>
+        <div class="art-meta">Jules Breton &nbsp;·&nbsp; 1884</div>
+        <p class="art-story">She's stopped mid-field at dawn to hear a lark she cannot see, and Breton gives her the same golden light he gives the sky — she is continuous with the horizon, not standing in front of it. Breton grew up in Courrieres and painted his village people for a Paris market that found the rural poor romantically appealing; this painting traveled to the American Midwest, where Willa Cather encountered it and used it as the central image of her 1915 novel about a girl who becomes an opera singer. That transformation — peasant girl, painting, novel, opera — is proof that art made about small moments can carry enormous ambitions across very long distances.</p>
+      </div>
+    </div>
+
+    <!-- Colophon -->
+    <footer class="colophon" data-reveal>
+      <div class="colophon-title"><em>Morning Brief</em></div>
+      <div class="colophon-tally">6 articles · 10 newsletters · 1 episode</div>
+      <div class="colophon-art">Mountain Brook (Bierstadt) · Pastoral Landscape with Ruins (van de Velde) · Water Lilies (Monet) · The Song of the Lark (Breton)</div>
+      <span class="colophon-mark"></span>
+      <div class="colophon-tally" style="margin-top:1.25rem">© 2026 · Assembled daily for Durva Mathure</div>
+    </footer>
+
+  </main>
+
+  <script>
+  (function () {
+    var mast = document.getElementById('mast');
+    var folioFill = document.querySelector('.folio-bar-fill');
+    var revealEls = document.querySelectorAll('[data-reveal]');
+    var audioEls = document.querySelectorAll('audio');
+    var ticking = false;
+
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }
+
+    function update() {
+      ticking = false;
+      var scrollTop = window.scrollY;
+      var docH = document.documentElement.scrollHeight - window.innerHeight;
+      var p = docH > 0 ? scrollTop / docH : 0;
+
+      // Folio bar
+      document.documentElement.style.setProperty('--p', p);
+
+      // Masthead compact
+      if (scrollTop > 80) mast.classList.add('is-compact');
+      else mast.classList.remove('is-compact');
+
+      // Reveal
+      var wH = window.innerHeight;
+      revealEls.forEach(function (el) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < wH * 0.88 || rect.bottom < 0) {
+          el.classList.add('is-in');
+        }
+      });
+
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+
+    // Audio players
+    audioEls.forEach(function (audio) {
+      var btn = audio.parentElement.querySelector('.play-btn');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var isPlaying = !audio.paused;
+        // Pause all others
+        audioEls.forEach(function (a) {
+          if (a !== audio) {
+            a.pause();
+            var b = a.parentElement.querySelector('.play-btn');
+            if (b) b.classList.remove('is-playing');
+          }
+        });
+        if (isPlaying) {
+          audio.pause();
+          btn.classList.remove('is-playing');
+        } else {
+          audio.play();
+          btn.classList.add('is-playing');
+        }
+      });
+      audio.addEventListener('ended', function () {
+        btn.classList.remove('is-playing');
+      });
+    });
+  })();
+  </script>
+
+</body>
+</html>
